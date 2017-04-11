@@ -30,7 +30,7 @@ class CredIconAdmin(admin.ModelAdmin):
 class SearchManager(models.Manager):
     def visible(self, user, historical=False, deleted=False):
         usergroups = user.groups.all()
-        qs = super(SearchManager, self).get_query_set()
+        qs = super(SearchManager, self).get_queryset()
 
         if not user.is_staff or not deleted:
             qs = qs.exclude(is_deleted=True, latest=None)
