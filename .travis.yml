@@ -8,6 +8,7 @@ cache:
 install:
   - sudo apt-get update
   - sudo apt-get install -qq slapd ldap-utils
+  - pip install --upgrade pip
   - pip install -r requirements-mysql.txt -r requirements-dev.txt --use-mirrors --download-cache $HOME/.pip-cache/
   - pip install -r requirements-pgsql.txt --use-mirrors --download-cache $HOME/.pip-cache/
 before_script:
