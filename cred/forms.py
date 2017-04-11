@@ -17,6 +17,7 @@ class ExportForm(forms.Form):
 class TagForm(ModelForm):
     class Meta:
         model = Tag
+        fields = ['name']
 
 
 class CredForm(ModelForm):
