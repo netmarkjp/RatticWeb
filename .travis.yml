@@ -9,8 +9,8 @@ install:
   - sudo apt-get update
   - sudo apt-get install -qq slapd ldap-utils
   - pip install --upgrade pip
-  - pip install -r requirements-mysql.txt -r requirements-dev.txt --use-mirrors --download-cache $HOME/.pip-cache/
-  - pip install -r requirements-pgsql.txt --use-mirrors --download-cache $HOME/.pip-cache/
+  - pip install -r requirements-mysql.txt -r requirements-dev.txt --download-cache $HOME/.pip-cache/
+  - pip install -r requirements-pgsql.txt --download-cache $HOME/.pip-cache/
 before_script:
   - pushd docs/ldap; DEBUG=true ./startldap.sh; popd
   - export DISPLAY=:99.0
