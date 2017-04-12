@@ -5,8 +5,8 @@ cache:
   directories:
     - $HOME/.pip-cache/
 install:
-  - sudo apt-get update
-  - sudo apt-get install -qq slapd ldap-utils
+  - sudo apt-get -qq update
+  - sudo apt-get install -y -qq slapd ldap-utils
   - pip install --upgrade pip
   - pip install -r requirements-mysql.txt -r requirements-dev.txt
   - pip install -r requirements-pgsql.txt
