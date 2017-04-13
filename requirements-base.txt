@@ -1,7 +1,7 @@
 Django>=1.8,<1.9
 Markdown>=2.4,<2.5
 Pillow>=2.3,<2.4
-django-auth-ldap==1.1.8
+django-auth-ldap==1.2.10
 django-database-files==0.1
 django-otp==0.3.12
 django-tastypie==0.13.3
