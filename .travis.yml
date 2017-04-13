@@ -34,12 +34,16 @@ script:
 
   - cp docs/travis/mysql.cfg conf/local.cfg
   - rm -rf */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations
+  - ls -al */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations
   - python manage.py makemigrations
+  - python manage.py showmigrations
   - python manage.py migrate
   - ./runtests.sh --tests-only
 
   - cp docs/travis/pgsql.cfg conf/local.cfg
   - rm -rf */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations
+  - ls -al */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations
   - python manage.py makemigrations
+  - python manage.py showmigrations
   - python manage.py migrate
   - ./runtests.sh --tests-only
