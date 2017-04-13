@@ -60,11 +60,11 @@ class AccountViewTests(TestCase):
         oldkey = self.client.cookies[settings.SESSION_COOKIE_NAME].value
 
         # Kill the current session
-        response = self.client.post(reverse('kill_session', args=(oldkey,)))
+        response = self.client.post(reverse('kill_session', args=(oldkey,)), follow=False)
 
         # Check the response redirected to the login page
         profileurl = reverse('account.views.profile')
-        self.assertRedirects(response, profileurl, 302, 302)
+        self.assertRedirects(response, profileurl, 302, 302, fetch_redirect_response=False)
 
         # Check we have a new session
         newkey = self.client.cookies[settings.SESSION_COOKIE_NAME].value

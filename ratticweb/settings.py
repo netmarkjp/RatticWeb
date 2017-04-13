@@ -228,6 +228,7 @@ LOGGING = {
 PUBLIC_HELP_WIKI_BASE = 'https://github.com/tildaslash/RatticWeb/wiki/'
 LOGIN_REDIRECT_URL = urljoin(RATTIC_ROOT_URL, "cred/list/")
 LOGIN_URL = RATTIC_ROOT_URL
+LOGOUT_REDIRECT_URL = "/account/"
 
 # django-user-sessions
 SESSION_ENGINE = 'user_sessions.backends.db'
