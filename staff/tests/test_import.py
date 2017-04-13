@@ -42,13 +42,13 @@ class ImportTests(TestCase):
         self.assertEqual(data['group'], self.gp.id)
 
         # Check the right credentials are in there
-        cred = filter(lambda x: x['title'] == 'dans id', data['entries'])[0]
-        self.assertEqual(cred['title'], 'dans id')
+        cred = filter(lambda x: 'Internet picasa.com' in x['title'], data['entries'])[0]
+        self.assertEqual(cred['title'], 'Internet picasa.com dans id')
         self.assertEqual(cred['password'], 'CeidAcHuhy')
         self.assertEqual(sorted(cred['tags']), sorted(['Internet', 'picasa.com']))
 
         # Check for attachments
-        attcred = filter(lambda x: x['title'] == 'Attachment Test', data['entries'])[0]
+        attcred = filter(lambda x: 'Attachment' in x['title'], data['entries'])[0]
         self.assertEqual(attcred['filename'], 'test.txt')
         self.assertEqual(attcred['filecontent'], 'This is a test file.\n')
 
