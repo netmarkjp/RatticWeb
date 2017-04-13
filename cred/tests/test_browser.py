@@ -40,7 +40,7 @@ class JavascriptTests(LiveServerTestCase):
         super(JavascriptTests, cls).tearDownClass()
 
     def waitforload(self):
-        timeout = 4
+        timeout = 10
         WebDriverWait(self.selenium, timeout).until(
             lambda driver: driver.find_element_by_tag_name('body'))
 
