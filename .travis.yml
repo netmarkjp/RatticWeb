@@ -20,8 +20,8 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - ./runtests.sh --lint-only
-  - mysql -u root -e 'create database IF NOT EXISTS rattic;'
-  - psql -c 'create database rattic;' -U postgres
+  - mysql -u root -e 'create database IF NOT EXISTS rattic character set utf8 collate utf8_unicode_ci;'
+  - psql -c "create database rattic WITH ENCODING 'UTF8' LC_COLLATE='ja_JP.utf8' LC_CTYPE='ja_JP.utf8' TEMPLATE=template0" -U postgres
 script:
   - cp docs/travis/local.cfg conf/local.cfg
   - python manage.py collectstatic --noinput
