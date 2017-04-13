@@ -36,6 +36,7 @@ script:
   - rm -rf */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations
   - ls -al */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations || true
   - python manage.py makemigrations
+  - python manage.py makemigrations ratticweb cred account staff help
   - python manage.py showmigrations
   - mysql -u root -e 'show databases'
   - mysql -u root rattic -e 'show tables'
