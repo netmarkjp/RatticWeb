@@ -21,7 +21,7 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - ./runtests.sh --lint-only
   - mysql -u root -e 'create database IF NOT EXISTS rattic character set utf8 collate utf8_unicode_ci;'
-  - psql -c "create database rattic WITH ENCODING 'UTF8' LC_COLLATE='ja_JP.UTF-8' LC_CTYPE='ja_JP.utf8' TEMPLATE=template0" -U postgres
+  - psql -c "create database rattic WITH ENCODING 'UTF8' TEMPLATE=template0" -U postgres
 script:
   - cp docs/travis/local.cfg conf/local.cfg
   - python manage.py collectstatic --noinput
