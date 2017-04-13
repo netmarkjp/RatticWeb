@@ -23,20 +23,17 @@ before_script:
   - mysql -u root -e 'create database IF NOT EXISTS rattic character set utf8 collate utf8_unicode_ci;'
   - psql -c "create database rattic WITH ENCODING 'UTF8' TEMPLATE=template0" -U postgres
 script:
-  - cp docs/travis/local.cfg conf/local.cfg
-  - python manage.py collectstatic --noinput
-  - python manage.py makemigrations
-  - python manage.py migrate
-  - ./runtests.sh --tests-only
-
-  - cp docs/travis/ldap.cfg conf/local.cfg
-  - ./runtests.sh --tests-only
-
+#   - cp docs/travis/local.cfg conf/local.cfg
+#   - python manage.py collectstatic --noinput
+#   - python manage.py makemigrations
+#   - python manage.py migrate
+#   - ./runtests.sh --tests-only
+# 
+#   - cp docs/travis/ldap.cfg conf/local.cfg
+#   - ./runtests.sh --tests-only
+# 
   - cp docs/travis/mysql.cfg conf/local.cfg
-  - rm -rf */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations
-  - ls -al */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations || true
   - python manage.py makemigrations
-  - python manage.py makemigrations ratticweb cred account staff help
   - python manage.py showmigrations
   - mysql -u root -e 'show databases'
   - mysql -u root rattic -e 'show tables'
