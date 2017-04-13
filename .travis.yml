@@ -34,6 +34,7 @@ script:
 # 
   - cp docs/travis/mysql.cfg conf/local.cfg
   - python manage.py makemigrations
+  - python manage.py makemigrations ratticweb cred account staff help
   - python manage.py showmigrations
   - mysql -u root -e 'show databases'
   - mysql -u root rattic -e 'show tables'
