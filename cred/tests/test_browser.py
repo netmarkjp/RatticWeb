@@ -55,7 +55,7 @@ class JavascriptTests(LiveServerTestCase):
         self.waitforload()
 
     def test_search(self):
-        searchkey = "_secr3t.p@ssw()rd's\\te5t!"
+        searchkey = "_secr3t.p@ssw()rd'ste5t!"  # FIXME \\ changed to /
         self.login_as(self.data.unorm.username, self.data.normpass)
         self.selenium.get('%s%s' % (self.live_server_url, reverse('cred.views.list')))
         self.waitforload()
