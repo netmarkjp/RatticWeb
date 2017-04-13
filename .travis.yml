@@ -34,10 +34,7 @@ script:
 # 
   - cp docs/travis/mysql.cfg conf/local.cfg
   - python manage.py makemigrations
-  - python manage.py makemigrations ratticweb cred account staff help
-  - python manage.py showmigrations
-  - mysql -u root -e 'show databases'
-  - mysql -u root rattic -e 'show tables'
+  - python manage.py migrate --no-initial-data
   - python manage.py migrate
   - ./runtests.sh --tests-only
 
@@ -46,5 +43,6 @@ script:
   - ls -al */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations || true
   - python manage.py makemigrations
   - python manage.py showmigrations
+  - python manage.py migrate --no-initial-data
   - python manage.py migrate
   - ./runtests.sh --tests-only
