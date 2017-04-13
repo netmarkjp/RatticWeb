@@ -75,7 +75,7 @@ class Cred(models.Model):
     objects = SearchManager()
 
     # User changable fields
-    title = models.CharField(verbose_name=_('Title'), max_length=64, db_index=True)
+    title = models.CharField(verbose_name=_('Title'), max_length=255, db_index=True)
     url = models.URLField(verbose_name=_('URL'), blank=True, null=True, db_index=True)
     username = models.CharField(verbose_name=_('Username'), max_length=250, blank=True, null=True, db_index=True)
     password = models.CharField(verbose_name=_('Password'), max_length=250, blank=True, null=True)
