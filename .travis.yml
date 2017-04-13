@@ -23,7 +23,7 @@ before_script:
   - mysql -e 'create database IF NOT EXISTS rattic;'
   - psql -c 'create database rattic;' -U postgres
 script:
-  - echo -e '[ratticweb]\nsecretkey = blah!\n[filepaths]\nstatic = static' > conf/local.cfg
+  - cp docs/travis/local.cfg conf/local.cfg
   - python manage.py collectstatic --noinput
   - python manage.py makemigrations
   - python manage.py migrate
