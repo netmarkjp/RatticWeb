@@ -20,7 +20,7 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - ./runtests.sh --lint-only
-  - mysql -e 'create database IF NOT EXISTS rattic;'
+  - mysql -u root -e 'create database IF NOT EXISTS rattic;'
   - psql -c 'create database rattic;' -U postgres
 script:
   - cp docs/travis/local.cfg conf/local.cfg
@@ -34,15 +34,17 @@ script:
 
   - cp docs/travis/mysql.cfg conf/local.cfg
   - rm -rf */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations
-  - ls -al */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations
+  - ls -al */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations || true
   - python manage.py makemigrations
   - python manage.py showmigrations
+  - mysql -u root -e 'show databases'
+  - mysql -u root rattic -e 'show tables'
   - python manage.py migrate
   - ./runtests.sh --tests-only
 
   - cp docs/travis/pgsql.cfg conf/local.cfg
   - rm -rf */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations
-  - ls -al */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations
+  - ls -al */migrations /home/travis/virtualenv/python2.7.12/lib/python2.7/site-packages/*/migrations || true
   - python manage.py makemigrations
   - python manage.py showmigrations
   - python manage.py migrate
