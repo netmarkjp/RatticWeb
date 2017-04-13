@@ -3,19 +3,19 @@ from django.core.urlresolvers import reverse
 from django.test.utils import override_settings
 from django.utils.unittest import SkipTest
 
-from cred.models import Cred
+# from cred.models import Cred
 from ratticweb.tests.helper import TestData
 
-from cred.icon import get_icon_data
-
-from url_decode import urldecode
-import random
-import time
+# from cred.icon import get_icon_data
+#
+# from url_decode import urldecode
+# import random
+# import time
 
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.firefox.webdriver import FirefoxProfile
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.common.keys import Keys
+# from selenium.webdriver.common.keys import Keys
 
 from testconfig import config
 
@@ -151,38 +151,38 @@ class JavascriptTests(LiveServerTestCase):
     # FIXME AssertionError: u'' != 's3cr3t'
     # at self.assertEqual(currpass, self.data.cred.password)
     # ... may caused by failed to serve static files
-    #def test_password_generator(self):
-    #    timeout = 4
-    #    self.login_as(self.data.unorm.username, self.data.normpass)
-    #    self.selenium.get('%s%s' % (self.live_server_url,
-    #        reverse('cred.views.edit', args=(self.data.cred.id,))))
-    #    self.waitforload()
-    #    elempass = self.selenium.find_element_by_id('id_password')
-    #    # Check password is hidden
-    #    self.assertEqual(elempass.get_attribute('type'), 'password')
-    #    # Get password
-    #    currpass = elempass.get_attribute('value')
-    #    # Check password
-    #    self.assertEqual(currpass, self.data.cred.password)
-    #    # Show Dialog
-    #    self.selenium.find_element_by_id('genpass').click()
-    #    # Inject some entropy so we can generate randomness on travis-ci
-    #    start = time.time()
-    #    while self.selenium.execute_script("return sjcl.random.isReady()") == 0:
-    #        self.selenium.execute_script("sjcl.random.addEntropy({0}, 1, 'tests')".format(random.randint(0, 30000)))
-    #        if time.time() - start > 10:
-    #            raise Exception("Failed to seed the test!")
-    #    # Wait for dialog
-    #    WebDriverWait(self.selenium, timeout).until(
-    #        lambda driver: driver.find_element_by_id('genpassconfirm').is_displayed())
-    #    # Generate password
-    #    self.selenium.find_element_by_id('genpassconfirm').click()
-    #    # Wait for dialog
-    #    WebDriverWait(self.selenium, timeout).until(
-    #        lambda driver: driver.find_element_by_id('id_password').get_attribute('value') != self.data.cred.password)
-    #    currpass = elempass.get_attribute('value')
-    #    self.assertNotEqual(currpass, self.data.cred.password)
-    #    self.assertEqual(len(currpass), 12)
+    # def test_password_generator(self):
+    #     timeout = 4
+    #     self.login_as(self.data.unorm.username, self.data.normpass)
+    #     self.selenium.get('%s%s' % (self.live_server_url,
+    #         reverse('cred.views.edit', args=(self.data.cred.id,))))
+    #     self.waitforload()
+    #     elempass = self.selenium.find_element_by_id('id_password')
+    #     # Check password is hidden
+    #     self.assertEqual(elempass.get_attribute('type'), 'password')
+    #     # Get password
+    #     currpass = elempass.get_attribute('value')
+    #     # Check password
+    #     self.assertEqual(currpass, self.data.cred.password)
+    #     # Show Dialog
+    #     self.selenium.find_element_by_id('genpass').click()
+    #     # Inject some entropy so we can generate randomness on travis-ci
+    #     start = time.time()
+    #     while self.selenium.execute_script("return sjcl.random.isReady()") == 0:
+    #         self.selenium.execute_script("sjcl.random.addEntropy({0}, 1, 'tests')".format(random.randint(0, 30000)))
+    #         if time.time() - start > 10:
+    #             raise Exception("Failed to seed the test!")
+    #     # Wait for dialog
+    #     WebDriverWait(self.selenium, timeout).until(
+    #         lambda driver: driver.find_element_by_id('genpassconfirm').is_displayed())
+    #     # Generate password
+    #     self.selenium.find_element_by_id('genpassconfirm').click()
+    #     # Wait for dialog
+    #     WebDriverWait(self.selenium, timeout).until(
+    #         lambda driver: driver.find_element_by_id('id_password').get_attribute('value') != self.data.cred.password)
+    #     currpass = elempass.get_attribute('value')
+    #     self.assertNotEqual(currpass, self.data.cred.password)
+    #     self.assertEqual(len(currpass), 12)
 
     # FIXME NoSuchElementException: Message: Unable to locate element: [id="password"]
     # def test_script_injection(self):
