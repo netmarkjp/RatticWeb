@@ -24,17 +24,21 @@ before_script:
   - psql -c 'create database rattic;' -U postgres
 script:
   - echo -e '[ratticweb]\nsecretkey = blah!' > conf/local.cfg
+  - python manage.py makemigrations
+  - python manage.py migrate
   - ./runtests.sh --tests-only
 
   - cp docs/travis/ldap.cfg conf/local.cfg
+  - python manage.py makemigrations
+  - python manage.py migrate
   - ./runtests.sh --tests-only
 
   - cp docs/travis/mysql.cfg conf/local.cfg
-  - python manage.py syncdb --noinput
+  - python manage.py makemigrations
   - python manage.py migrate
   - ./runtests.sh --tests-only
 
   - cp docs/travis/pgsql.cfg conf/local.cfg
-  - python manage.py syncdb --noinput
+  - python manage.py makemigrations
   - python manage.py migrate
   - ./runtests.sh --tests-only
