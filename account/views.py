@@ -146,6 +146,7 @@ class RatticTFADisableView(DisableView):
 class RatticTFABackupTokensView(BackupTokensView):
     template_name = 'account_tfa_backup_tokens.html'
     redirect_url = 'tfa_backup'
+    success_url = 'tfa_backup'
 
 
 class RatticTFASetupView(SetupView):
