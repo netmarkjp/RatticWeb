@@ -20,6 +20,7 @@ class TagForm(ModelForm):
         model = Tag
         fields = '__all__'
 
+
 class GroupChoiceField(forms.ModelChoiceField):
     def __init__(self, *args, **kwargs):
         super(GroupChoiceField, self).__init__(*args, **kwargs)
@@ -35,6 +36,7 @@ class GroupChoiceField(forms.ModelChoiceField):
         except Exception as e:
             raise ValidationError("value cannot find group %s: %s" % (value, e))
 
+
 class NewValueModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     def __init__(self, *args, **kwargs):
         super(NewValueModelMultipleChoiceField, self).__init__(*args, **kwargs)
@@ -48,16 +50,17 @@ class NewValueModelMultipleChoiceField(forms.ModelMultipleChoiceField):
             raise ValidationError(self.error_messages['list'], code='list')
         return value
 
+
 class CredForm(ModelForm):
     group = GroupChoiceField(
-            queryset=Group.objects.all(),
-            required=True,
-            )
+        queryset=Group.objects.all(),
+        required=True,
+    )
     tags = NewValueModelMultipleChoiceField(
-            queryset=Tag.objects.all(),
-            required=False,
-            help_text="Select tags (if any)",
-            )
+        queryset=Tag.objects.all(),
+        required=False,
+        help_text="Select tags (if any)",
+    )
 
     def __init__(self, requser, *args, **kwargs):
         # Check if a new attachment was uploaded
