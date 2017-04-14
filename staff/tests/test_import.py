@@ -122,7 +122,7 @@ class ImportTests(TestCase):
 
         # Check things worked
         self.assertTemplateUsed(resp, 'staff_import_process.html')
-        # self.assertTrue(resp.context['form'].is_valid())  # FIXME
+        self.assertTrue(resp.context['form'].is_valid())
 
         # Perform the save
         post = {}
