@@ -26,15 +26,17 @@ class GroupChoiceField(forms.ModelChoiceField):
         super(GroupChoiceField, self).__init__(*args, **kwargs)
 
     def clean(self, value):
+        if self.required and not value:
+            raise ValidationError("required")
         try:
             if isinstance(value, Group):
                 if value in self.queryset:
                     return value
             else:
                 return Group.objects.get(id=int(value))
-            raise ValidationError("value cannot find group %s " % (value))
+            raise ValidationError("cannot find group %s " % (value))
         except Exception as e:
-            raise ValidationError("value cannot find group %s: %s" % (value, e))
+            raise ValidationError("cannot find group %s: %s" % (value, e))
 
 
 class NewValueModelMultipleChoiceField(forms.ModelMultipleChoiceField):
