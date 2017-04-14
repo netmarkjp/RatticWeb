@@ -64,10 +64,12 @@ LANGUAGES = (
 USE_TZ = True
 
 # Additional locations of static files
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, "static"),
 )
 
 # A tuple of callables that are used to populate the context in
@@ -161,7 +163,6 @@ INSTALLED_APPS = (
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp',
     'two_factor',
-    'south',
     'tastypie',
     'kombu.transport.django',
     'djcelery',
@@ -229,6 +230,7 @@ LOGGING = {
 PUBLIC_HELP_WIKI_BASE = 'https://github.com/tildaslash/RatticWeb/wiki/'
 LOGIN_REDIRECT_URL = urljoin(RATTIC_ROOT_URL, "cred/list/")
 LOGIN_URL = RATTIC_ROOT_URL
+LOGOUT_REDIRECT_URL = "/account/"
 
 # django-user-sessions
 SESSION_ENGINE = 'user_sessions.backends.db'

@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm, SelectMultiple, Select, PasswordInput
+from django.core.exceptions import ValidationError
 
 import paramiko
 from ssh_key import SSHKey
@@ -17,9 +18,52 @@ class ExportForm(forms.Form):
 class TagForm(ModelForm):
     class Meta:
         model = Tag
+        fields = '__all__'
+
+
+class GroupChoiceField(forms.ModelChoiceField):
+    def __init__(self, *args, **kwargs):
+        super(GroupChoiceField, self).__init__(*args, **kwargs)
+
+    def clean(self, value):
+        if self.required and not value:
+            raise ValidationError("required")
+        try:
+            if isinstance(value, Group):
+                if value in self.queryset:
+                    return value
+            else:
+                return Group.objects.get(id=int(value))
+            raise ValidationError("cannot find group %s " % (value))
+        except Exception as e:
+            raise ValidationError("cannot find group %s: %s" % (value, e))
+
+
+class NewValueModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def __init__(self, *args, **kwargs):
+        super(NewValueModelMultipleChoiceField, self).__init__(*args, **kwargs)
+
+    def clean(self, value):
+        if self.required and not value:
+            raise ValidationError(self.error_messages['required'], code='required')
+        elif not self.required and not value:
+            return self.queryset.none()
+        if not isinstance(value, (list, tuple)):
+            raise ValidationError(self.error_messages['list'], code='list')
+        return value
 
 
 class CredForm(ModelForm):
+    group = GroupChoiceField(
+        queryset=Group.objects.all(),
+        required=True,
+    )
+    tags = NewValueModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        required=False,
+        help_text="Select tags (if any)",
+    )
+
     def __init__(self, requser, *args, **kwargs):
         # Check if a new attachment was uploaded
         self.changed_ssh_key = len(args) > 0 and args[1].get('ssh_key', None) is not None

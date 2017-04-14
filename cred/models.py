@@ -30,7 +30,7 @@ class CredIconAdmin(admin.ModelAdmin):
 class SearchManager(models.Manager):
     def visible(self, user, historical=False, deleted=False):
         usergroups = user.groups.all()
-        qs = super(SearchManager, self).get_query_set()
+        qs = super(SearchManager, self).get_queryset()
 
         if not user.is_staff or not deleted:
             qs = qs.exclude(is_deleted=True, latest=None)
@@ -75,15 +75,15 @@ class Cred(models.Model):
     objects = SearchManager()
 
     # User changable fields
-    title = models.CharField(verbose_name=_('Title'), max_length=64, db_index=True)
+    title = models.CharField(verbose_name=_('Title'), max_length=255, db_index=True)
     url = models.URLField(verbose_name=_('URL'), blank=True, null=True, db_index=True)
     username = models.CharField(verbose_name=_('Username'), max_length=250, blank=True, null=True, db_index=True)
     password = models.CharField(verbose_name=_('Password'), max_length=250, blank=True, null=True)
     descriptionmarkdown = models.BooleanField(verbose_name=_('Markdown Description'), default=False, )
     description = models.TextField(verbose_name=_('Description'), blank=True, null=True)
     group = models.ForeignKey(Group, verbose_name=_('Group'))
-    groups = models.ManyToManyField(Group, verbose_name=_('Groups'), related_name="child_creds", blank=True, null=True, default=None)
-    tags = models.ManyToManyField(Tag, verbose_name=_('Tags'), related_name='child_creds', blank=True, null=True, default=None)
+    groups = models.ManyToManyField(Group, verbose_name=_('Groups'), related_name="child_creds", blank=True, default=None)
+    tags = models.ManyToManyField(Tag, verbose_name=_('Tags'), related_name='child_creds', blank=True, default=None)
     iconname = models.CharField(verbose_name=_('Icon'), default='Key.png', max_length=64)
     ssh_key = SizedFileField(verbose_name=_('SSH key'), storage=CredAttachmentStorage(), max_upload_size=settings.RATTIC_MAX_ATTACHMENT_SIZE, null=True, blank=True, upload_to='not required')
     attachment = SizedFileField(verbose_name=_('Attachment'), storage=CredAttachmentStorage(), max_upload_size=settings.RATTIC_MAX_ATTACHMENT_SIZE, null=True, blank=True, upload_to='not required')
@@ -243,7 +243,7 @@ class CredChangeQManager(models.Manager):
 class CredChangeQ(models.Model):
     objects = CredChangeQManager()
 
-    cred = models.ForeignKey(Cred, unique=True)
+    cred = models.OneToOneField(Cred)
     time = models.DateTimeField(auto_now_add=True)
 
 
