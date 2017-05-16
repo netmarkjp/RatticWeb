@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.core.urlresolvers import reverse
 from account.models import ApiKey, ApiKeyForm
+from account.models import TwoFactorAuthSecret
 from models import UserProfileForm, LDAPPassChangeForm
 
 from django.views.decorators.debug import sensitive_post_parameters
+from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.template.response import TemplateResponse
 from django.utils.timezone import now
@@ -18,6 +22,12 @@ from two_factor.utils import default_device
 from two_factor.views import DisableView, BackupTokensView, SetupView, LoginView
 from datetime import timedelta
 import uuid
+
+from django import forms
+import pyotp
+import zbar  # TODO Fix Segmentation fault at MacOSX
+import PIL.Image
+import urlparse
 
 
 @login_required
@@ -58,6 +68,9 @@ def profile(request):
     else:
         form = UserProfileForm(instance=request.user.profile)
 
+    # TwoFactorAuthSecret
+    two_factor_auth_secrets = TwoFactorAuthSecret.objects.filter(user=request.user)
+
     # Show the template
     return render(request, 'account_profile.html', {
         'keys': keys,
@@ -67,6 +80,7 @@ def profile(request):
         'user': request.user,
         'default_device': default_device(request.user),
         'backup_tokens': backup_tokens,
+        'two_factor_auth_secrets': two_factor_auth_secrets,
     })
 
 
@@ -164,7 +178,7 @@ class RatticTFAGenerateApiKey(LoginView):
     def get(self, request, *args, **kwargs):
         res = HttpResponse()
         res.set_cookie("csrftoken", request.META['CSRF_COOKIE'])
-        res.status_code=405
+        res.status_code = 405
         return res
 
     def render(self, form=None, **kwargs):
@@ -187,3 +201,106 @@ class RatticTFAGenerateApiKey(LoginView):
         res = HttpResponse(newkey.key)
         res.status_code = 200
         return res
+
+
+class QRImageUploadForm(forms.Form):
+    secret_key = forms.CharField(max_length=255, required=True)
+    qr_image_file = forms.FileField(required=True)
+
+
+class TwoFactorAuthSecretIndexView(TemplateView):
+    template_name = "two_factor_auth_secret_index.html"
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response({"form": QRImageUploadForm()})
+
+    def post(self, request, *args, **kwargs):
+        # QRコードをアップロードしてもらって解析
+        form = QRImageUploadForm(request.POST, request.FILES)
+        if not form.is_valid():
+            return self.render_to_response({"form": form})
+        parsed = parse_qr_image(request.FILES["qr_image_file"])
+        name = parsed[0]
+        plain_secret = parsed[1]
+
+        # 暗号化して保存
+        obj = TwoFactorAuthSecret(user=request.user, name=name)
+        obj.set_secret(plain_secret, request.POST.get("secret_key"))
+        obj.save()
+
+        # 成功したら個別画面にリダイレクト
+        return HttpResponseRedirect(reverse("two_factor_auth_secret_id", args=[obj.id]))
+
+
+class SecretForm(forms.Form):
+    secret_key = forms.CharField(max_length=255, required=True)
+
+
+class TwoFactorAuthSecretView(TemplateView):
+    template_name = "two_factor_auth_secret.html"
+
+    def get(self, request, *args, **kwargs):
+        id_ = kwargs.get("id")  # id from url
+
+        secrets = TwoFactorAuthSecret.objects.filter(id=id_, user=request.user)
+        if len(secrets) == 0:
+            return Http404
+        secret = secrets[0]
+
+        return self.render_to_response({"secret": secret, "form": SecretForm()})
+
+    def post(self, request, *args, **kwargs):
+        id_ = kwargs.get("id")  # id from url
+
+        secrets = TwoFactorAuthSecret.objects.filter(id=id_, user=request.user)
+        if len(secrets) == 0:
+            return Http404
+        secret = secrets[0]
+
+        form = SecretForm(request.POST)
+        if not form.is_valid():
+            return self.render_to_response({"secret": secret, "form": form})
+
+        try:
+            otp = pyotp.TOTP(secret.get_plain_secret(request.POST.get("secret_key"))).now()
+            return self.render_to_response({"secret": secret, "form": form, "otp": otp})
+        except Exception as e:
+            print(e)
+            return self.render_to_response({"secret": secret, "form": form, "otp": "ERROR: Failed to decrypt. Secret key maybe incorrect"})  # TODO error messaging
+
+
+class TwoFactorAuthSecretDeleteView(TemplateView):
+    template_name = "two_factor_auth_secret.html"
+
+    def post(self, request, *args, **kwargs):
+        id_ = kwargs.get("id")  # id from url
+
+        secrets = TwoFactorAuthSecret.objects.filter(id=id_, user=request.user)
+        if len(secrets) == 0:
+            return Http404
+        secret = secrets[0]
+
+        secret.delete()
+        return HttpResponseRedirect(reverse("account.views.profile"))
+
+
+def parse_qr_image(filepath):
+
+    scanner = zbar.ImageScanner()
+    scanner.parse_config("enable")
+    pil = PIL.Image.open(filepath).convert("L")
+    (width, height) = pil.size
+    image = zbar.Image(width, height, "Y800", pil.tobytes())
+    scanner.scan(image)
+
+    name = ""
+    plain_secret = ""
+    for symbol in image:
+        parsed = urlparse.urlparse(symbol.data)
+        try:
+            name = urlparse.parse_qs(parsed.query).get("issuer", [""])[0]
+        except Exception as e:
+            print(e)
+        plain_secret = urlparse.parse_qs(parsed.query).get("secret", [""])[0]
+
+    return (name, plain_secret)
