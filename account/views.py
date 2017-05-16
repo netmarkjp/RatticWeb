@@ -244,7 +244,7 @@ class TwoFactorAuthSecretView(TemplateView):
 
         secrets = TwoFactorAuthSecret.objects.filter(id=id_, user=request.user)
         if len(secrets) == 0:
-            return Http404
+            raise Http404
         secret = secrets[0]
 
         return self.render_to_response({"secret": secret, "form": SecretForm()})
@@ -254,7 +254,7 @@ class TwoFactorAuthSecretView(TemplateView):
 
         secrets = TwoFactorAuthSecret.objects.filter(id=id_, user=request.user)
         if len(secrets) == 0:
-            return Http404
+            raise Http404
         secret = secrets[0]
 
         form = SecretForm(request.POST)
@@ -277,7 +277,7 @@ class TwoFactorAuthSecretDeleteView(TemplateView):
 
         secrets = TwoFactorAuthSecret.objects.filter(id=id_, user=request.user)
         if len(secrets) == 0:
-            return Http404
+            raise Http404
         secret = secrets[0]
 
         secret.delete()
