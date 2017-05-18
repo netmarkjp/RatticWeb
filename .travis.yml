@@ -29,8 +29,8 @@ script:
   - python manage.py migrate
   - ./runtests.sh --tests-only
 
-  - cp docs/travis/ldap.cfg conf/local.cfg
-  - ./runtests.sh --tests-only
+#  - cp docs/travis/ldap.cfg conf/local.cfg
+#  - ./runtests.sh --tests-only
 
 # # RatticDB cannot run on MySQL
 #   - cp docs/travis/mysql.cfg conf/local.cfg
