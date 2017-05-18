@@ -41,6 +41,7 @@ class JavascriptTests(LiveServerTestCase):
 
     def waitforload(self):
         timeout = 30
+        time.sleep(1)
         WebDriverWait(self.selenium, timeout).until(
             lambda driver: driver.find_element_by_tag_name('body'))
 
