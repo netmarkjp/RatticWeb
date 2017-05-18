@@ -380,7 +380,7 @@ if LDAP_ENABLED:
 
     # Determines which LDAP users are staff, if not defined, privilege can be set manually
     if config.has_option('ldap', 'staff'):
-        AUTH_LDAP_USER_FLAGS_BY_GROUP['is_staff'] = confget('ldap', 'staff', '')
+        AUTH_LDAP_USER_FLAGS_BY_GROUP['is_staff'] = confget('ldap', 'staff', '').split("|")
 
     AUTHENTICATION_BACKENDS = (
         'django_auth_ldap.backend.LDAPBackend',
