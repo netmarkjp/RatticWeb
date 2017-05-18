@@ -5,6 +5,21 @@
 
 {% block content %}
 <h1>{% trans "Your Account" %}</h1>
+
+<div>
+    <table class="table table-striped table-bordered table-condensed">
+        <tr><th>TwoFactorAuthSecretNames <br/>
+                <a class="btn" href="/account/two_factor_auth_secret/">Add Two Factor Auth Secret</a>{# TODO use url #}
+            </th><td>{# TODO use trans #}
+                {% for tfa in two_factor_auth_secrets %}
+                <a class="btn" href="/account/two_factor_auth_secret/{{ tfa.id }}/">{# TODO use url #}
+                    {{ tfa.name }}
+                </a>
+                {% endfor %}
+            </td></tr>
+    </table>
+</div>
+
 <form action="" method="POST">{% csrf_token %}
 <table class="table table-striped table-bordered table-condensed">
 <tr><th>{% trans "Username" %}</th><td>{{ user.username }}</td></tr>

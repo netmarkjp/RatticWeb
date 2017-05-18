@@ -18,3 +18,13 @@ Support and Known Issues:
 
 Dev Setup: <https://github.com/tildaslash/RatticWeb/wiki/Development>
 
+# Special setup topics on MacOSX
+
+Segmentation fault will occure caused by zbar.
+
+To avoid problem, use `npinchot/zbar` .
+
+```
+pip uninstall zbar
+pip install git+https://github.com/npinchot/zbar.git
+```
