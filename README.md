@@ -27,7 +27,7 @@ Dev Setup: <https://github.com/tildaslash/RatticWeb/wiki/Development>
 - Drop Python 2.6 support => Only Python 2.7
 - Update django to 1.8 and also update some modules.
 - New fature RatticWeb can use as Two Factor Auth Device
-    - Read QR Image, and show 6 numbers
+    - Read QR Image(only PNG), and show 6 numbers
 - Change Cred.title max length 64 => 255
 
 Note: When you use MySQL, `python manage.py migrate auth` must run before `python manage.py migrate`
