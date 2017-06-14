@@ -252,13 +252,13 @@ class TwoFactorAuthSecretView(TemplateView):
         secret = secrets[0]
 
         return self.render_to_response(
-                {
-                    "secret": secret,
-                    "form": SecretForm(),
-                    "modify_form": ModifySecretForm(),
-                    "id_": id_,
-                    }
-                )
+            {
+                "secret": secret,
+                "form": SecretForm(),
+                "modify_form": ModifySecretForm(),
+                "id_": id_,
+            },
+        )
 
     def post(self, request, *args, **kwargs):
         id_ = kwargs.get("id")  # id from url
@@ -271,36 +271,36 @@ class TwoFactorAuthSecretView(TemplateView):
         form = SecretForm(request.POST)
         if not form.is_valid():
             return self.render_to_response(
-                    {
-                        "secret": secret,
-                        "form": form,
-                        "modify_form": ModifySecretForm(),
-                        "id_": id_,
-                        },
-                    )
+                {
+                    "secret": secret,
+                    "form": form,
+                    "modify_form": ModifySecretForm(),
+                    "id_": id_,
+                },
+            )
 
         try:
             otp = pyotp.TOTP(secret.get_plain_secret(request.POST.get("secret_key"))).now()
             return self.render_to_response(
-                    {
-                        "secret": secret,
-                        "form": form,
-                        "modify_form": ModifySecretForm(),
-                        "id_": id_,
-                        "otp": otp,
-                        },
-                    )
+                {
+                    "secret": secret,
+                    "form": form,
+                    "modify_form": ModifySecretForm(),
+                    "id_": id_,
+                    "otp": otp,
+                },
+            )
         except Exception as e:
             print(e)
             return self.render_to_response(
-                    {
-                        "secret": secret,
-                        "form": form,
-                        "modify_form": ModifySecretForm(),
-                        "id_": id_,
-                        "otp": "ERROR: Failed to decrypt. Secret key maybe incorrect",
-                        },
-                    )  # TODO error messaging
+                {
+                    "secret": secret,
+                    "form": form,
+                    "modify_form": ModifySecretForm(),
+                    "id_": id_,
+                    "otp": "ERROR: Failed to decrypt. Secret key maybe incorrect",
+                },
+            )  # TODO error messaging
 
 
 class TwoFactorAuthSecretModifyView(TemplateView):
