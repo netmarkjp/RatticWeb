@@ -71,7 +71,7 @@ class SearchManager(models.Manager):
 class Cred(models.Model):
     METADATA = ('description', 'descriptionmarkdown', 'group', 'groups', 'tags', 'iconname', 'latest', 'id', 'modified', 'attachment_name', 'ssh_key_name')
     SORTABLES = ('title', 'username', 'group', 'id', 'modified')
-    APP_SET = ('is_deleted', 'latest', 'modified', 'attachment_name', 'ssh_key_name', 'two_factor_auth_secret')
+    APP_SET = ('is_deleted', 'latest', 'modified', 'attachment_name', 'ssh_key_name',)
     objects = SearchManager()
 
     # User changable fields
@@ -88,6 +88,8 @@ class Cred(models.Model):
     ssh_key = SizedFileField(verbose_name=_('SSH key'), storage=CredAttachmentStorage(), max_upload_size=settings.RATTIC_MAX_ATTACHMENT_SIZE, null=True, blank=True, upload_to='not required')
     attachment = SizedFileField(verbose_name=_('Attachment'), storage=CredAttachmentStorage(), max_upload_size=settings.RATTIC_MAX_ATTACHMENT_SIZE, null=True, blank=True, upload_to='not required')
 
+    two_factor_auth_secret = models.TextField(verbose_name='2FA Secret', blank=True, null=True)
+
     # Application controlled fields
     is_deleted = models.BooleanField(default=False, db_index=True)
     latest = models.ForeignKey('Cred', related_name='history', blank=True, null=True, db_index=True)
@@ -96,8 +98,6 @@ class Cred(models.Model):
 
     ssh_key_name = models.CharField(max_length=64, null=True, blank=True)
     attachment_name = models.CharField(max_length=64, null=True, blank=True)
-
-    two_factor_auth_secret = models.TextField(verbose_name='2FA Secret', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         try:

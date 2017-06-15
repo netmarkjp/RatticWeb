@@ -18,6 +18,7 @@ from cred.icon import get_icon_list
 from django.contrib.auth.models import Group
 
 import pyotp
+from account.views import parse_qr_image
 
 
 @login_required
@@ -312,6 +313,15 @@ def add(request):
 
     return render(request, 'cred_edit.html', {'form': form, 'action':
       reverse('cred.views.add'), 'icons': get_icon_list()})
+
+
+@login_required
+def qr(request):
+    if request.method == 'POST':
+        parsed = parse_qr_image(request.FILES["qr_image_file"])
+        return JsonResponse({"secret_key": parsed[1]})
+
+    return JsonResponse({"secret_key": ""})
 
 
 @login_required
