@@ -1,6 +1,4 @@
-$("#reload-otp").on(
-    "click", 
-    function(ev){
+var reloadOTP = function(ev){
         var url = window.location.origin + ev.currentTarget.attributes.dest.value
         fetch(url, {
             method: "GET",
@@ -12,4 +10,6 @@ $("#reload-otp").on(
         }).then(function(json){
             $("#otp").text(json.otp);
         });
-    });
+};
+$("#reload-otp-initial").on("click", reloadOTP);
+$("#reload-otp").on("click", reloadOTP);

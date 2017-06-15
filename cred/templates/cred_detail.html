@@ -84,11 +84,11 @@
 <tr>
     <th>
         One Time Password {# TODO use trans #}
-        <a id="reload-otp" class="btn btn-mini" dest="{% url "cred.views.otp" cred.id %}"><span id="reload-otp-icon" class="icon-eye-open"></span></a>
+        <a id="reload-otp" class="btn btn-mini" dest="{% url "cred.views.otp" cred.id %}"><span id="reload-otp-icon" class="icon-refresh"></span></a>
 
     </th>
     <td>
-        <pre id="otp"></pre>
+        <pre id="otp">Push <a id="reload-otp-initial" class="btn btn-mini" dest="{% url "cred.views.otp" cred.id %}"><span id="reload-otp-icon" class="icon-refresh"></span></a> to show One Time Password</pre>
     </td>
 </tr>
 {% endif %}
