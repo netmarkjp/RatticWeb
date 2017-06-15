@@ -26,11 +26,37 @@ Dev Setup: <https://github.com/tildaslash/RatticWeb/wiki/Development>
 
 - Drop Python 2.6 support => Only Python 2.7
 - Update django to 1.8 and also update some modules.
-- New fature RatticWeb can use as Two Factor Auth Device
-    - Read QR Image(only PNG), and show 6 numbers
-- Change Cred.title max length 64 => 255
+- UserProfile: New fature RatticWeb can use as Two Factor Auth Device
+    - Read QR Image, and show 6 numbers
+- Credential: New fature RatticWeb can use as Two Factor Auth Device
+    - Read QR Image, and show 6 numbers
+- Credential: Change Cred.title max length 64 => 255
 
 Note: When you use MySQL, `python manage.py migrate auth` must run before `python manage.py migrate`
+
+# Supported QR Image format
+
+It depends on PIL(Pillow).
+
+If you support JPEG, you may have to install libjpeg-devel before `pip install` .
+
+CentOS7 example:
+
+```
+sudo yum install libjpeg-turbo-devel
+```
+
+# How to use with MySQL
+
+Do `migrate auth` before `migrate` .
+
+```bash
+$ mysql -u root -h 127.0.0.1 -P 3306 -e 'create database rattic character set utf8 collate utf8_unicode_ci;'
+$ python manage.py makemigrations
+$ python manage.py migrate auth
+$ python manage.py migrate
+$ python manage.py createsuperuser --username rattic --email rattic@example.com
+```
 
 # Special setup topics on MacOSX
 
