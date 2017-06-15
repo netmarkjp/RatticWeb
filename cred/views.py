@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.http import Http404
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -15,6 +16,8 @@ from exporters import export_keepass
 from cred.icon import get_icon_list
 
 from django.contrib.auth.models import Group
+
+import pyotp
 
 
 @login_required
@@ -220,6 +223,23 @@ def detail(request, cred_id):
         'readonly': readonly,
         'groups': request.user.groups,
     })
+
+
+@login_required
+def otp(request, cred_id):
+    cred = get_object_or_404(Cred, pk=cred_id)
+
+    # Check user has perms as owner or viewer
+    if not cred.is_visible_by(request.user):
+        raise Http404
+
+    CredAudit(audittype=CredAudit.CREDVIEWOTP, cred=cred, user=request.user).save()
+
+    otp = "EMPTY"
+    if cred.two_factor_auth_secret:
+        otp = pyotp.totp.TOTP(cred.two_factor_auth_secret).now()
+
+    return JsonResponse({"otp": otp})
 
 
 @login_required

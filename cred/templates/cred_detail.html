@@ -80,6 +80,18 @@
 <tr><th>{% trans "Tags" %}</th><td>{% for t in cred.tags.all %}<a href="{% url 'cred.views.list' 'tag' t.id %}">{{ t.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</td></tr>
 <tr><th>{% trans "Last Changed" %}</th><td>{{ cred.modified }}</td></tr>
 <tr><th>{% trans "Created" %}</th><td>{{ cred.created }}</td></tr>
+{% if cred.two_factor_auth_secret %}
+<tr>
+    <th>
+        One Time Password {# TODO use trans #}
+        <a id="reload-otp" class="btn btn-mini" dest="{% url "cred.views.otp" cred.id %}"><span id="reload-otp-icon" class="icon-eye-open"></span></a>
+
+    </th>
+    <td>
+        <pre id="otp"></pre>
+    </td>
+</tr>
+{% endif %}
 </table>
 
 
