@@ -14,7 +14,15 @@
     {% for field in form %}
         <div class="control-group">
             {{ field.errors }}
-            <label class="control-label" for="{{ field.html_name }}">{{ field.label }}</label>
+            <label class="control-label" for="{{ field.html_name }}">{{ field.label }}
+            {% if field.name == "two_factor_auth_secret" %}
+            <div>
+                <a class="btn" id="two_factor_auth_secret_qr_image_input" name="two_factor_auth_secret_qr_image_input">
+                    <span class="icon-upload"></span>
+                </a>
+            </div>
+            {% endif %}
+            </label>
             <div class="controls">
               {{ field }}
             </div>
@@ -24,5 +32,10 @@
         <input id="credsave" class="btn btn-primary" type="submit" value="{% trans "Submit" %}" />
     </div>
 </form>
+
+<form id="qr_image_file_form" style="display:none;" enctype="multipart/form-data" autocomplete="off" action="{% url "cred.views.qr" %}" >{% csrf_token %}
+    <input id="qr_image_file" name="qr_image_file" type="file" />
+</form>
+
 {% endblock %}
 

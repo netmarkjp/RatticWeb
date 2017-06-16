@@ -5,7 +5,7 @@ from views import profile, newapikey, deleteapikey, RatticSessionDeleteView
 from views import RatticTFADisableView, RatticTFABackupTokensView
 from views import RatticTFASetupView, RatticTFALoginView
 from views import RatticTFAGenerateApiKey
-from views import TwoFactorAuthSecretIndexView, TwoFactorAuthSecretView, TwoFactorAuthSecretDeleteView
+from views import TwoFactorAuthSecretIndexView, TwoFactorAuthSecretView, TwoFactorAuthSecretDeleteView, TwoFactorAuthSecretModifyView
 
 from two_factor.views import QRGeneratorView
 
@@ -33,6 +33,7 @@ urlpatterns = patterns('',
     url(r"^two_factor_auth_secret/$", TwoFactorAuthSecretIndexView.as_view(), name="two_factor_auth_secret_index"),
     url(r"^two_factor_auth_secret/(?P<id>\w+)/$", TwoFactorAuthSecretView.as_view(), name="two_factor_auth_secret_id"),
     url(r"^two_factor_auth_secret/(?P<id>\w+)/delete/$", TwoFactorAuthSecretDeleteView.as_view(), name="two_factor_auth_secret_id_delete"),
+    url(r"^two_factor_auth_secret/(?P<id>\w+)/modify/$", TwoFactorAuthSecretModifyView.as_view(), name="two_factor_auth_secret_id_modify"),
 )
 
 if settings.GOAUTH2_ENABLED:

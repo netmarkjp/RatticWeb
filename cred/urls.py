@@ -18,7 +18,9 @@ urlpatterns = patterns('cred.views',
     url(r'^detail/(?P<cred_id>\d+)/ssh_key/$', 'downloadsshkey'),
     url(r'^edit/(?P<cred_id>\d+)/$', 'edit'),
     url(r'^delete/(?P<cred_id>\d+)/$', 'delete'),
+    url(r'^otp/(?P<cred_id>\d+)/$', 'otp'),
     url(r'^add/$', 'add'),
+    url(r'^qr/$', 'qr'),
 
     # Adding to the change queue
     url(r'^addtoqueue/(?P<cred_id>\d+)/$', 'addtoqueue'),

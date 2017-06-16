@@ -71,7 +71,7 @@ class SearchManager(models.Manager):
 class Cred(models.Model):
     METADATA = ('description', 'descriptionmarkdown', 'group', 'groups', 'tags', 'iconname', 'latest', 'id', 'modified', 'attachment_name', 'ssh_key_name')
     SORTABLES = ('title', 'username', 'group', 'id', 'modified')
-    APP_SET = ('is_deleted', 'latest', 'modified', 'attachment_name', 'ssh_key_name')
+    APP_SET = ('is_deleted', 'latest', 'modified', 'attachment_name', 'ssh_key_name',)
     objects = SearchManager()
 
     # User changable fields
@@ -87,6 +87,8 @@ class Cred(models.Model):
     iconname = models.CharField(verbose_name=_('Icon'), default='Key.png', max_length=64)
     ssh_key = SizedFileField(verbose_name=_('SSH key'), storage=CredAttachmentStorage(), max_upload_size=settings.RATTIC_MAX_ATTACHMENT_SIZE, null=True, blank=True, upload_to='not required')
     attachment = SizedFileField(verbose_name=_('Attachment'), storage=CredAttachmentStorage(), max_upload_size=settings.RATTIC_MAX_ATTACHMENT_SIZE, null=True, blank=True, upload_to='not required')
+
+    two_factor_auth_secret = models.TextField(verbose_name='2FA Secret', blank=True, null=True)
 
     # Application controlled fields
     is_deleted = models.BooleanField(default=False, db_index=True)
@@ -207,11 +209,13 @@ class CredAudit(models.Model):
     CREDPASSVIEW = 'P'
     CREDDELETE = 'D'
     CREDSCHEDCHANGE = 'S'
+    CREDVIEWOTP = 'O'
     CREDAUDITCHOICES = (
         (CREDADD, _('Added')),
         (CREDCHANGE, _('Changed')),
         (CREDMETACHANGE, _('Only Metadata Changed')),
         (CREDVIEW, _('Only Details Viewed')),
+        (CREDVIEWOTP, _('OTP Viewed')),
         (CREDEXPORT, _('Exported')),
         (CREDDELETE, _('Deleted')),
         (CREDSCHEDCHANGE, _('Scheduled For Change')),
