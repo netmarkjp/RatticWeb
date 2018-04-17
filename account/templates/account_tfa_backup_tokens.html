@@ -21,7 +21,7 @@
   {% endif %}
 
   <form method="post">{% csrf_token %}{{ form }}
-    <a href="{% url 'account.views.profile' %}"
+    <a href="{% url 'account:profile' %}"
        class="pull-right btn btn-link">{% trans "Back to Account Profile" %}</a>
     <button class="btn btn-primary" type="submit">{% trans "Generate Tokens" %}</button>
   </form>

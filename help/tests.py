@@ -24,22 +24,22 @@ class HelpTests(TestCase):
 
     def test_help_home(self):
         with self.settings(HELP_SYSTEM_FILES=self.tmpdir):
-            resp = self.client.get(reverse('help.views.home'))
+            resp = self.client.get(reverse('help:home'))
             self.assertContains(resp, "<h1 id=\"heading-1\">Heading 1</h1>",
                     html=True, count=1)
             self.assertEqual(resp.context['file'], self.homefile)
             self.assertTemplateUsed(resp, 'help_markdown.html')
 
     def test_help_markdown(self):
-        helplink = reverse('help.views.markdown', args=('Test_Link',))
+        helplink = reverse('help:markdown', args=('Test_Link',))
         with self.settings(HELP_SYSTEM_FILES=self.tmpdir):
-            resp = self.client.get(reverse('help.views.markdown', args=('Test',)))
+            resp = self.client.get(reverse('help:markdown', args=('Test',)))
             self.assertContains(resp, '<p><a class="wikilink" href="' + helplink + '">Test Link</a></p>',
                     html=True, count=1)
             self.assertEqual(resp.context['file'], self.testfile)
             self.assertTemplateUsed(resp, 'help_markdown.html')
 
-            resp = self.client.get(reverse('help.views.markdown',
+            resp = self.client.get(reverse('help:markdown',
                 args=('NonExistantdfgdfgdfgd',)))
             self.assertEqual(resp.status_code, 404)
             self.assertTemplateNotUsed(resp, 'help_markdown.html')
@@ -49,7 +49,7 @@ class HelpOffTests(TestCase):
     def test_helpoff(self):
         client = Client()
         with self.settings(HELP_SYSTEM_FILES=False):
-            resp = client.get(reverse('help.views.home'))
+            resp = client.get(reverse('help:home'))
             self.assertEqual(resp.status_code, 200)
             self.assertTemplateUsed(resp, 'help_nohelp.html')
             self.assertTemplateNotUsed(resp, 'help_markdown.html')

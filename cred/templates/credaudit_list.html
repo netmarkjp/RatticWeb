@@ -1,4 +1,4 @@
-{% load url from future %}
+
 {% load i18n %}
 <h2>{% trans "Audit Logs" %}</h2>
 <table class="table table-striped table-bordered table-condensed">
@@ -18,9 +18,9 @@
 <tr>
     <td>{{ audit.get_audittype_display }}</td>
     {% if type == 'user' %}
-        <td><a href="{% url "staff.views.userdetail" audit.user.id %}">{{ audit.user.username }}</a></td>
+        <td><a href="{% url "staff:userdetail" audit.user.id %}">{{ audit.user.username }}</a></td>
     {% else %}
-    <td><a href="{% url "cred.views.detail" audit.cred.id %}">{{ audit.cred.title }}</a></td>
+    <td><a href="{% url "cred:detail" audit.cred.id %}">{{ audit.cred.title }}</a></td>
     {% endif %}
     <td>{{ audit.time }}</td>
 </tr>

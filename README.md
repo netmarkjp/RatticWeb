@@ -68,3 +68,42 @@ To avoid problem, use `npinchot/zbar` .
 pip uninstall zbar
 pip install git+https://github.com/npinchot/zbar.git
 ```
+
+# Major changes
+
+Major difference from original RatticWeb
+
+## Python 2.7
+
+Support version is only Python 2.7
+(drop 2.6)
+
+## Django 1.11
+
+Use Django 1.11.
+
+And below changes because of dependency.
+
+- [x] django-social-auth => social-auth-app-django
+    - [ ] do test
+- remove south
+    - [x] django-database-files => django-database-files-3000
+- [x] django.core.context_processors => django.template.context_processors
+- [x] remove `{% load url from future %}`
+- [x] remove `django.utils.unittest`, use `django.test.utils`
+- [x] remove `django.conf.urls.patterns`
+- [x] regurate url/namespace/name mappings.
+- [x] apply django.utils.safestring.mark_safe to renderd markdown, icons (custom tag)
+- [x] remove test_initial_password in account/tests/test_{profile,middleware}.py
+    - when `set_unusable_password` called, user looks logout?
+    - I cannot find the scenario to use this testcase
+
+## Two Factor Auth Device in Shared Credentials
+
+- Read QR Image, store secret, and show 6 numbers
+- Shared between users
+
+## Two Factor Auth Device in User Profile
+
+- Read QR Image, store secret, and show 6 numbers
+- Can use only each user themselves

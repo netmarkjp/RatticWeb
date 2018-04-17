@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+
 {% load i18n %}
 
 {% block content %}
@@ -37,10 +37,10 @@
   <tr>
     <td>{{ audit.get_audittype_display }}</td>
     {% if by != 'user' %}
-      <td><a href="{% url 'staff.views.userdetail' audit.user.id %}">{{ audit.user.username }}</a></td>
+      <td><a href="{% url 'staff:userdetail' audit.user.id %}">{{ audit.user.username }}</a></td>
     {% endif %}
     {% if vy != 'cred' %}
-      <td><a href="{% url 'cred.views.detail' audit.cred.id %}">{{ audit.cred.title }}</a></td>
+      <td><a href="{% url 'cred:detail' audit.cred.id %}">{{ audit.cred.title }}</a></td>
     {% endif %}
     <td>{{ audit.time }}</td>
   </tr>

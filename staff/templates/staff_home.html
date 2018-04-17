@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+
 {% load i18n %}
 
 {% block title %}{% trans "Staff" %} - {% trans "Rattic" %}{% endblock %}
@@ -9,15 +9,15 @@
 
 <div class="btn-group">
   {% if not LDAP_ENABLED %}
-    <a class="btn" href="{% url "user_add" %}">{% trans "Add User" %}</a>
+    <a class="btn" href="{% url "staff:user_add" %}">{% trans "Add User" %}</a>
   {% endif %}
 
   {% if not USE_LDAP_GROUPS %}
-    <a class="btn" href="{% url "staff.views.groupadd" %}">{% trans "Add Group" %}</a>
+    <a class="btn" href="{% url "staff:groupadd" %}">{% trans "Add Group" %}</a>
   {% endif %}
-  <a class="btn" href="{% url "staff.views.upload_keepass" %}">{% trans "Import Keepass" %}</a>
-  <a class="btn" href="{% url "cred.views.list" 'special' 'trash' %}">{% trans "View Trash" %}</a>
-  <a class="btn" href="{% url "staff.views.audit" "days" 7 %}">{% trans "Audit One Week" %}</a>
+  <a class="btn" href="{% url "staff:upload_keepass" %}">{% trans "Import Keepass" %}</a>
+  <a class="btn" href="{% url "cred:list" 'special' 'trash' %}">{% trans "View Trash" %}</a>
+  <a class="btn" href="{% url "staff:audit" "days" 7 %}">{% trans "Audit One Week" %}</a>
 </div>
 
 <h2>{% trans "Users" %}</h2>
@@ -32,11 +32,11 @@
   </tr>
 {% for u in userlist %}
 <tr {% if not u.is_active %}class="error"{% endif %}>
-  <td><a href="{% url "staff.views.userdetail" u.id %}">{{ u.username }}</a></td>
+  <td><a href="{% url "staff:userdetail" u.id %}">{{ u.username }}</a></td>
   <td>{{ u.email }}</td>
   {% if not LDAP_ENABLED %}
-  <td><a href="{% url "user_edit" u.id %}">{% trans "Edit" %}</a></td>
-  <td><a href="{% url "staff.views.userdelete" u.id %}">{% trans "Delete" %}</a></td>
+  <td><a href="{% url "staff:user_edit" u.id %}">{% trans "Edit" %}</a></td>
+  <td><a href="{% url "staff:userdelete" u.id %}">{% trans "Delete" %}</a></td>
   {% endif %}
 </tr>
 {% endfor %}
@@ -47,10 +47,10 @@
   <tr><th>{% trans "Name" %}</th>{% if not USE_LDAP_GROUPS %}<th>{% trans "Edit" %}</th><th>{% trans "Delete" %}</th>{% endif %}</tr>
 {% for g in grouplist %}
 <tr>
-  <td><a href="{% url "staff.views.groupdetail" g.id %}">{{ g.name }}</a></td>
+  <td><a href="{% url "staff:groupdetail" g.id %}">{{ g.name }}</a></td>
   {% if not USE_LDAP_GROUPS %}
-    <td><a href="{% url "staff.views.groupedit" g.id %}">{% trans "Edit" %}</a></td>
-    <td><a href="{% url "staff.views.groupdelete" g.id %}">{% trans "Delete" %}</a></td>
+    <td><a href="{% url "staff:groupedit" g.id %}">{% trans "Edit" %}</a></td>
+    <td><a href="{% url "staff:groupdelete" g.id %}">{% trans "Delete" %}</a></td>
   {% endif %}
 </tr>
 {% endfor %}

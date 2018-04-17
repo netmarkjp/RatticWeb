@@ -63,6 +63,29 @@ LANGUAGES = (
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+                'ratticweb.context_processors.base_template_reqs',
+                'ratticweb.context_processors.logo_selector',
+            ],
+        },
+    },
+]
+
 # Additional locations of static files
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATICFILES_DIRS = (
@@ -72,35 +95,12 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-# A tuple of callables that are used to populate the context in
-# RequestContext. These callables take a request object as their
-# argument and return a dictionary of items to be merged into
-# the context.
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
-    'ratticweb.context_processors.base_template_reqs',
-    'ratticweb.context_processors.logo_selector',
-)
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
-
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -167,7 +167,7 @@ INSTALLED_APPS = (
     'kombu.transport.django',
     'djcelery',
     'database_files',
-    'social_auth',
+    'social_django',
 ) + LOCAL_APPS
 
 if os.environ.get("ENABLE_TESTS") == "1":
@@ -395,19 +395,20 @@ GOAUTH2_ENABLED = 'goauth2' in config.sections()
 
 if GOAUTH2_ENABLED:
     AUTHENTICATION_BACKENDS = (
-        'social_auth.backends.google.GoogleOAuth2Backend',
+        'social_core.backends.google.GoogleOAuth2',
         'django.contrib.auth.backends.ModelBackend',
     )
 
     LOGIN_URL = RATTIC_ROOT_URL + 'account/login/google-oauth2/'
     LOGIN_ERROR_URL = RATTIC_ROOT_URL + '/account/login-error/'
 
-    SOCIAL_AUTH_RAISE_EXCEPTIONS = False
-    SOCIAL_AUTH_PROCESS_EXCEPTIONS = 'social_auth.utils.log_exceptions_to_messages'
+    # SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+    # SOCIAL_AUTH_PROCESS_EXCEPTIONS = 'social_auth.utils.log_exceptions_to_messages'
 
-    GOOGLE_OAUTH2_CLIENT_ID = config.get('goauth2', 'client_id')
-    GOOGLE_OAUTH2_CLIENT_SECRET = config.get('goauth2', 'client_secret')
-    GOOGLE_WHITE_LISTED_DOMAINS = [config.get('goauth2', 'domain')]
+    SOCIAL_AUTH_URL_NAMESPACE = 'social'
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config.get('goauth2', 'client_id')
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config.get('goauth2', 'client_secret')
+    SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = [config.get('goauth2', 'domain')]
 
     SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
     SOCIAL_AUTH_COMPLETE_URL_NAME = 'socialauth_complete'

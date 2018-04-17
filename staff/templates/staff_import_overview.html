@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+
 {% load i18n %}
 
 {% block content %}
@@ -16,8 +16,8 @@
 {% for e in entries %}
 <tr>
     <td>
-        <a class="btn btn-mini btn-success" href="{% url "staff.views.import_process" forloop.counter0 %}">{% trans "Import" %}</a>
-        <a class="btn btn-mini btn-danger" href="{% url "staff.views.import_ignore" forloop.counter0 %}">{% trans "Skip" %}</a>
+        <a class="btn btn-mini btn-success" href="{% url "staff:import_process" forloop.counter0 %}">{% trans "Import" %}</a>
+        <a class="btn btn-mini btn-danger" href="{% url "staff:import_ignore" forloop.counter0 %}">{% trans "Skip" %}</a>
     </td>
     <td>{{ e.title }}</td>
     <td>{{ e.username }}</td>

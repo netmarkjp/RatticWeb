@@ -1,12 +1,12 @@
-{% load url from future %}
+
 {% load static from staticfiles %}
 {% load url_root from ratticweb %}
 {% load i18n %}
-{% url "cred.views.list" as cred_views_list %}
-{% url "cred.views.search" as cred_views_search %}
-{% url "cred.views.list" "special" "changeq" as cred_views_viewqueue %}
-{% url "staff.views.home" as staff_views_home %}
-{% url "help.views.home" as help_views_home %}
+{% url "cred:list" as cred_views_list %}
+{% url "cred:search" as cred_views_search %}
+{% url "cred:list" "special" "changeq" as cred_views_viewqueue %}
+{% url "staff:home" as staff_views_home %}
+{% url "help:home" as help_views_home %}
 <div class="navbar">
     <div class="navbar-inner">
         <a class="brand" href="{% url_root %}"><img class="logo" src="{% static rattic_icon %}" /><span class="hidden-phone"> {% trans "RatticDB" %}</span></a>
@@ -38,7 +38,7 @@
             <ul class="dropdown-menu" role="menu">
               {% if user.is_authenticated %}
                 <li>
-                  <a href="{% url "cred.views.tags" %}">{% trans "Tags" %}</a>
+                  <a href="{% url "cred:tags" %}">{% trans "Tags" %}</a>
                 </li>
                 <li>
                   <a href="{{ cred_views_list }}">{% trans "All Passwords" %}</a>
@@ -52,11 +52,11 @@
                   </li>
                 {% endif %}
                 <li>
-                  <a href="{% url "django.contrib.auth.views.logout" %}">{% trans "Logout" %}</a>
+                  <a href="{% url "account:logout" %}">{% trans "Logout" %}</a>
                 </li>
               {% else %}
                 <li>
-                  <a href="{% url 'login' %}">{% trans "Login" %}</a>
+                  <a href="{% url 'account:login' %}">{% trans "Login" %}</a>
                 </li>
               {% endif %}
               {% if helplinks %}

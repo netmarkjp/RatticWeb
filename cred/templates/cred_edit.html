@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+
 {% load i18n %}
 {% load credicons %}
 
@@ -33,7 +33,7 @@
     </div>
 </form>
 
-<form id="qr_image_file_form" style="display:none;" enctype="multipart/form-data" autocomplete="off" action="{% url "cred.views.qr" %}" >{% csrf_token %}
+<form id="qr_image_file_form" style="display:none;" enctype="multipart/form-data" autocomplete="off" action="{% url "cred:qr" %}" >{% csrf_token %}
     <input id="qr_image_file" name="qr_image_file" type="file" />
 </form>
 

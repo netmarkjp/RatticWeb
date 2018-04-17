@@ -19,7 +19,7 @@ class CredEmailTests(TestCase):
         print mail.outbox[0].body
 
         salutation = 'Hello ' + self.data.unorm.username + ',\n'
-        credlink = 'https://' + settings.HOSTNAME + reverse('cred.views.detail', args=(self.data.cred.id, ))
+        credlink = 'https://' + settings.HOSTNAME + reverse('cred:detail', args=(self.data.cred.id, ))
 
         self.assertEqual('RatticDB - Passwords requiring changes', mail.outbox[0].subject)
         self.assertEqual(1, len(mail.outbox[0].to))

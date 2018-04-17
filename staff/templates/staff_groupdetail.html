@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+
 {% load i18n %}
 
 {% block content %}
@@ -10,19 +10,19 @@
 <h1>{% trans "Group" %} {{ group.name }}</h1>
 {% if not USE_LDAP_GROUPS %}
 <div class="btn-group">
-    <a class="btn" href="{% url "staff.views.groupedit" group.id %}">{% trans "Edit" %}</a>
-    <a class="btn btn-danger" href="{% url "staff.views.groupdelete" group.id %}">{% trans "Delete" %}</a> 
+    <a class="btn" href="{% url "staff:groupedit" group.id %}">{% trans "Edit" %}</a>
+    <a class="btn btn-danger" href="{% url "staff:groupdelete" group.id %}">{% trans "Delete" %}</a> 
 </div>
 <br /><br />
 {% endif %}
 {% endif %}
 <table class="table table-striped table-bordered table-condensed">
 <tr><th>{% trans "Name" %}</th><td>{{ group.name }}</td></tr>
-<tr><th>{% trans "Users" %}</th><td>{% for u in group.user_set.all %}<a href="{% url "staff.views.userdetail" u.id %}">{{ u.username }}</a>, {% endfor %}</td></tr>
-<tr><th>{% trans "Passwords" %}</th><td>{% for c in group.cred_set.all %}<a href="{% url "cred.views.detail" c.id %}">{{ c.title }}</a>, {% endfor %}</td></tr>
+<tr><th>{% trans "Users" %}</th><td>{% for u in group.user_set.all %}<a href="{% url "staff:userdetail" u.id %}">{{ u.username }}</a>, {% endfor %}</td></tr>
+<tr><th>{% trans "Passwords" %}</th><td>{% for c in group.cred_set.all %}<a href="{% url "cred:detail" c.id %}">{{ c.title }}</a>, {% endfor %}</td></tr>
 </table>
 {% if delete %}
-    <form action="{% url "staff.views.groupdelete" group.id %}" method="post">{% csrf_token %}
+    <form action="{% url "staff:groupdelete" group.id %}" method="post">{% csrf_token %}
         <input type="submit" class="btn btn-danger" value="{% trans "Delete forever" %}" />
     </form>
 {% endif %}

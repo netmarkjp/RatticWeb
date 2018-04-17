@@ -13,7 +13,7 @@ class CredAttachmentTest(TestCase):
     def test_upload_cred(self):
         # Load the edit form
         resp = self.data.norm.get(
-            reverse('cred.views.edit', args=(self.data.cred.id, ))
+            reverse('cred:edit', args=(self.data.cred.id, ))
         )
         self.assertEqual(resp.status_code, 200)
 
@@ -28,7 +28,7 @@ class CredAttachmentTest(TestCase):
             post['attachment'] = fp
 
             resp = self.data.norm.post(
-                reverse('cred.views.edit', args=(self.data.cred.id, )),
+                reverse('cred:edit', args=(self.data.cred.id, )),
                 post
             )
             self.assertEqual(resp.status_code, 302)

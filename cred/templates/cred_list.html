@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+
 {% load i18n %}
 {% load credicons %}
 
@@ -19,25 +19,25 @@
   </div>
 {% endfor %}
 <form id="credchecksubmitform" action="" method="post">{% csrf_token %}
-<input type='hidden' name='next' value="{% url "cred.views.list" filter value sortdir sort page %}" />
+<input type='hidden' name='next' value="{% url "cred:list" filter value sortdir sort page %}" />
 <table class="table table-striped table-bordered table-condensed table-responsive-fourth-column table-responsive-fifth-column">
   <thead>
     <tr>
       <td colspan="5">
         {% if buttons.add %}
-          <a class="btn" href="{% url "cred.views.add" %}">{% trans "Add New" %}</a>
+          <a class="btn" href="{% url "cred:add" %}">{% trans "Add New" %}</a>
         {% endif %}
         {% if buttons.delete %}
-          <button class="btn disabled rattic-check-enabled rattic-form-submit" data-target=".cred-list-check" data-action="{% url "cred.views.bulkdelete" %}">{% trans "Delete" %}</button>
+          <button class="btn disabled rattic-check-enabled rattic-form-submit" data-target=".cred-list-check" data-action="{% url "cred:bulkdelete" %}">{% trans "Delete" %}</button>
         {% endif %}
         {% if buttons.undelete %}
-          <button class="btn disabled rattic-check-enabled rattic-form-submit" data-target=".cred-list-check" data-action="{% url "cred.views.bulkundelete" %}">{% trans "Undelete" %}</button>
+          <button class="btn disabled rattic-check-enabled rattic-form-submit" data-target=".cred-list-check" data-action="{% url "cred:bulkundelete" %}">{% trans "Undelete" %}</button>
         {% endif %}
         {% if buttons.changeq %}
-          <button class="btn disabled rattic-check-enabled rattic-form-submit" data-target=".cred-list-check" data-action="{% url "cred.views.bulkaddtoqueue" %}">{% trans "Add to Change Queue" %}</button>
+          <button class="btn disabled rattic-check-enabled rattic-form-submit" data-target=".cred-list-check" data-action="{% url "cred:bulkaddtoqueue" %}">{% trans "Add to Change Queue" %}</button>
         {% endif %}
         {% if buttons.tagger %}
-		<select name="tag" class="rattic-single-tag-selector rattic-check-enabled" data-target=".cred-list-check" placeholder="{% trans "Apply a Tag" %}" data-action="{% url "cred.views.bulktagcred" %}" tabindex="-1"></select>
+		<select name="tag" class="rattic-single-tag-selector rattic-check-enabled" data-target=".cred-list-check" placeholder="{% trans "Apply a Tag" %}" data-action="{% url "cred:bulktagcred" %}" tabindex="-1"></select>
         {% endif %}
         {% if buttons.export and EXPORT_ENABLED %}
           <button class="btn" href="#exportmodal" data-toggle="modal">{% trans "Download Keepass" %}</button>
@@ -50,23 +50,23 @@
       </th>
       <th>
         {% if sort == 'title' %}
-          <a href="{% url 'cred.views.list' filter value revsortdir 'title' page %}">{% trans "Title" %} {% if sortdir == 'ascending' %}<i class='icon-chevron-up'></i>{% else %}<i class='icon-chevron-down'></i>{% endif %}</a>
+          <a href="{% url 'cred:list' filter value revsortdir 'title' page %}">{% trans "Title" %} {% if sortdir == 'ascending' %}<i class='icon-chevron-up'></i>{% else %}<i class='icon-chevron-down'></i>{% endif %}</a>
         {% else %}
-          <a href="{% url 'cred.views.list' filter value sortdir 'title' page %}">{% trans "Title" %}</a>
+          <a href="{% url 'cred:list' filter value sortdir 'title' page %}">{% trans "Title" %}</a>
         {% endif %}
       </th>
       <th>
         {% if sort == 'username' %}
-          <a href="{% url 'cred.views.list' filter value revsortdir 'username' page %}">{% trans "User" %} {% if sortdir == 'ascending' %}<i class='icon-chevron-up'></i>{% else %}<i class='icon-chevron-down'></i>{% endif %}</a>
+          <a href="{% url 'cred:list' filter value revsortdir 'username' page %}">{% trans "User" %} {% if sortdir == 'ascending' %}<i class='icon-chevron-up'></i>{% else %}<i class='icon-chevron-down'></i>{% endif %}</a>
         {% else %}
-          <a href="{% url 'cred.views.list' filter value sortdir 'username' page %}">{% trans "User" %}</a>
+          <a href="{% url 'cred:list' filter value sortdir 'username' page %}">{% trans "User" %}</a>
         {% endif %}
       </th>
       <th>
         {% if sort == 'group' %}
-          <a href="{% url 'cred.views.list' filter value revsortdir 'group' page %}">{% trans "Owner Group" %} {% if sortdir == 'ascending' %}<i class='icon-chevron-up'></i>{% else %}<i class='icon-chevron-down'></i>{% endif %}</a>
+          <a href="{% url 'cred:list' filter value revsortdir 'group' page %}">{% trans "Owner Group" %} {% if sortdir == 'ascending' %}<i class='icon-chevron-up'></i>{% else %}<i class='icon-chevron-down'></i>{% endif %}</a>
         {% else %}
-          <a href="{% url 'cred.views.list' filter value sortdir 'group' page %}">{% trans "Owner Group" %}</a>
+          <a href="{% url 'cred:list' filter value sortdir 'group' page %}">{% trans "Owner Group" %}</a>
         {% endif %}
       </th>
       <th>
@@ -79,17 +79,17 @@
     {% for c in credlist %}
     <tr class="{% if c.on_changeq %}warning{% endif %} {% if not c.is_latest %}info{% endif %}">
       <td class="credcheck"><input type="checkbox" name="credcheck" value="{{ c.id }}" class="list-checktarget cred-list-check" /></td>
-      <td>{% cred_icon c.iconname %} <a href="{% url "cred.views.detail" c.id %}">{{ c.title|default:"(No Title)" }}</a></td>
+      <td>{% cred_icon c.iconname %} <a href="{% url "cred:detail" c.id %}">{{ c.title|default:"(No Title)" }}</a></td>
       <td>{{ c.username }}</td>
-      <td>{% if c.group in groups.all %}<a href="{% url "cred.views.list" "group" c.group.id %}">{{ c.group.name }}</a>{% else %}{{ c.group.name }}{% endif %}</td>
+      <td>{% if c.group in groups.all %}<a href="{% url "cred:list" "group" c.group.id %}">{{ c.group.name }}</a>{% else %}{{ c.group.name }}{% endif %}</td>
       <td>
         {% for g in c.groups.all %}
             {% if g in groups.all %}
-                <a href="{% url "cred.views.list" "group" g.id %}">{{ g.name }}</a>
+                <a href="{% url "cred:list" "group" g.id %}">{{ g.name }}</a>
             {% else %}{{ g.name }}{% endif %}{% if not forloop.last %}, {% endif %}
         {% endfor %}
       </td>
-      <td>{% for t in c.tags.all %}{% if not forloop.first %}, {% endif %}<a href="{% url "cred.views.list" "tag" t.id %}">{{ t.name }}</a>{% endfor %}</td>
+      <td>{% for t in c.tags.all %}{% if not forloop.first %}, {% endif %}<a href="{% url "cred:list" "tag" t.id %}">{{ t.name }}</a>{% endfor %}</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -99,7 +99,7 @@
 <div class="pagination pagination-centered">
   <ul>
     {% if credlist.has_previous %}
-    <li><a href="{% url "cred.views.list" filter value sortdir sort credlist.previous_page_number %}">{% trans "Prev" %}</a></li>
+    <li><a href="{% url "cred:list" filter value sortdir sort credlist.previous_page_number %}">{% trans "Prev" %}</a></li>
     {% else %}
       <li class="disabled"><a href="#">{% trans "Prev" %}</a></li>
     {% endif %}
@@ -107,11 +107,11 @@
       {% if credlist.number == p %}
         <li class="active"><a href="#">{{ p }}</a></li>
       {% else %}
-        <li><a href="{% url "cred.views.list" filter value sortdir sort p %}">{{ p }}</a></li>
+        <li><a href="{% url "cred:list" filter value sortdir sort p %}">{{ p }}</a></li>
       {% endif %}
     {% endfor %}
     {% if credlist.has_next %}
-      <li><a href="{% url "cred.views.list" filter value sortdir sort credlist.next_page_number %}">{% trans "Next" %}</a></li>
+      <li><a href="{% url "cred:list" filter value sortdir sort credlist.next_page_number %}">{% trans "Next" %}</a></li>
     {% else %}
       <li class="disabled"><a href="#">{% trans "Next" %}</a></li>
     {%endif %}

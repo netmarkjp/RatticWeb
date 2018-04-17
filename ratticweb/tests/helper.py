@@ -49,7 +49,7 @@ class TestData:
 
     def login(self, username, password):
         c = Client()
-        loginurl = reverse('login')
+        loginurl = reverse('account:login')
         c.post(loginurl, {
             'auth-username': username,
             'auth-password': password,

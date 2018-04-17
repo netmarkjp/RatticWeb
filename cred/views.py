@@ -206,7 +206,7 @@ def detail(request, cred_id):
 
     if request.user.is_staff:
         credlogs = cred.logs.all()[:5]
-        morelink = reverse('staff.views.audit', args=('cred', cred.id))
+        morelink = reverse('staff:audit', args=('cred', cred.id))
     else:
         credlogs = None
         morelink = None
@@ -307,12 +307,12 @@ def add(request):
         if form.is_valid():
             form.save()
             CredAudit(audittype=CredAudit.CREDADD, cred=form.instance, user=request.user).save()
-            return HttpResponseRedirect(reverse('cred.views.list'))
+            return HttpResponseRedirect(reverse('cred:list'))
     else:
         form = CredForm(request.user)
 
     return render(request, 'cred_edit.html', {'form': form, 'action':
-      reverse('cred.views.add'), 'icons': get_icon_list()})
+      reverse('cred:add'), 'icons': get_icon_list()})
 
 
 @login_required
@@ -360,7 +360,7 @@ def edit(request, cred_id):
 
             # If we dont have anywhere to go, go to the details page
             if next is None:
-                return HttpResponseRedirect(reverse('cred.views.detail', args=(cred.id,)))
+                return HttpResponseRedirect(reverse('cred:detail', args=(cred.id,)))
             else:
                 return HttpResponseRedirect(next)
     else:
@@ -368,7 +368,7 @@ def edit(request, cred_id):
         CredAudit(audittype=CredAudit.CREDPASSVIEW, cred=cred, user=request.user).save()
 
     return render(request, 'cred_edit.html', {'form': form,
-        'action': reverse('cred.views.edit', args=(cred.id,)),
+        'action': reverse('cred:edit', args=(cred.id,)),
         'next': next,
         'icons': get_icon_list(),
         'cred': cred,
@@ -396,11 +396,11 @@ def delete(request, cred_id):
     if request.method == 'POST':
         CredAudit(audittype=CredAudit.CREDDELETE, cred=cred, user=request.user).save()
         cred.delete()
-        return HttpResponseRedirect(reverse('cred.views.list'))
+        return HttpResponseRedirect(reverse('cred:list'))
 
     CredAudit(audittype=CredAudit.CREDVIEW, cred=cred, user=request.user).save()
 
-    return render(request, 'cred_detail.html', {'cred': cred, 'lastchange': lastchange, 'action': reverse('cred.views.delete', args=(cred_id,)), 'delete': True})
+    return render(request, 'cred_detail.html', {'cred': cred, 'lastchange': lastchange, 'action': reverse('cred:delete', args=(cred_id,)), 'delete': True})
 
 
 @login_required
@@ -414,7 +414,7 @@ def tagadd(request):
         form = TagForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('cred.views.list'))
+            return HttpResponseRedirect(reverse('cred:list'))
     else:
         form = TagForm()
 
@@ -428,7 +428,7 @@ def tagedit(request, tag_id):
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('cred.views.list'))
+            return HttpResponseRedirect(reverse('cred:list'))
     else:
         form = TagForm(instance=tag)
 
@@ -440,7 +440,7 @@ def tagdelete(request, tag_id):
     tag = get_object_or_404(Tag, pk=tag_id)
     if request.method == 'POST':
         tag.delete()
-        return HttpResponseRedirect(reverse('cred.views.tags'))
+        return HttpResponseRedirect(reverse('cred:tags'))
     return render(request, 'cred_tagdelete.html', {'t': tag})
 
 
@@ -452,7 +452,7 @@ def addtoqueue(request, cred_id):
         raise Http404
     CredChangeQ.objects.add_to_changeq(cred)
     CredAudit(audittype=CredAudit.CREDSCHEDCHANGE, cred=cred, user=request.user).save()
-    return HttpResponseRedirect(reverse('cred.views.list', args=('special', 'changeq')))
+    return HttpResponseRedirect(reverse('cred:list', args=('special', 'changeq')))
 
 
 @login_required
@@ -463,7 +463,7 @@ def bulkdelete(request):
             CredAudit(audittype=CredAudit.CREDDELETE, cred=c, user=request.user).save()
             c.delete()
 
-    redirect = request.POST.get('next', reverse('cred.views.list'))
+    redirect = request.POST.get('next', reverse('cred:list'))
     return HttpResponseRedirect(redirect)
 
 
@@ -476,7 +476,7 @@ def bulkundelete(request):
             c.is_deleted = False
             c.save()
 
-    redirect = request.POST.get('next', reverse('cred.views.list'))
+    redirect = request.POST.get('next', reverse('cred:list'))
     return HttpResponseRedirect(redirect)
 
 
@@ -488,7 +488,7 @@ def bulkaddtoqueue(request):
             CredAudit(audittype=CredAudit.CREDSCHEDCHANGE, cred=c, user=request.user).save()
             CredChangeQ.objects.add_to_changeq(c)
 
-    redirect = request.POST.get('next', reverse('cred.views.list'))
+    redirect = request.POST.get('next', reverse('cred:list'))
     return HttpResponseRedirect(redirect)
 
 
@@ -501,5 +501,5 @@ def bulktagcred(request):
             CredAudit(audittype=CredAudit.CREDMETACHANGE, cred=c, user=request.user).save()
             c.tags.add(tag)
 
-    redirect = request.POST.get('next', reverse('cred.views.list'))
+    redirect = request.POST.get('next', reverse('cred:list'))
     return HttpResponseRedirect(redirect)

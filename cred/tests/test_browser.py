@@ -1,7 +1,6 @@
 from django.test import LiveServerTestCase
 from django.core.urlresolvers import reverse
-from django.test.utils import override_settings
-from django.utils.unittest import SkipTest
+from django.test.utils import override_settings, skipIf
 
 from cred.models import Cred
 from ratticweb.tests.helper import TestData
@@ -26,8 +25,7 @@ class JavascriptTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
-        if config.get("no_selenium"):
-            raise SkipTest("Told not to run selenium tests")
+        skipIf(config.get("no_selenium"), "Told not to run selenium tests")
 
         ffp = FirefoxProfile()
         ffp.native_events_enabled = True
@@ -58,19 +56,19 @@ class JavascriptTests(LiveServerTestCase):
     def test_search(self):
         searchkey = "_secr3t.p@ssw()rd'ste5t!"  # FIXME \\ changed to /
         self.login_as(self.data.unorm.username, self.data.normpass)
-        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred.views.list')))
+        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred:list')))
         self.waitforload()
         searchbox = self.selenium.find_element_by_id("search-box")
         searchbox.send_keys(searchkey)
         searchbox.send_keys(Keys.ENTER)
         self.waitforload()
         cur_url = urldecode(self.selenium.current_url)
-        plan_url = urldecode('%s%s' % (self.live_server_url, reverse('cred.views.list', args=('search', searchkey))))
+        plan_url = urldecode('%s%s' % (self.live_server_url, reverse('cred:list', args=('search', searchkey))))
         self.assertEquals(cur_url, plan_url)
 
     def test_password_details(self):
         self.login_as(self.data.unorm.username, self.data.normpass)
-        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred.views.detail', args=(self.data.cred.id,))))
+        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred:detail', args=(self.data.cred.id,))))
         self.waitforload()
         elempass = self.selenium.find_element_by_id('password')
         # Check password is hidden
@@ -85,7 +83,7 @@ class JavascriptTests(LiveServerTestCase):
     def test_password_edit(self):
         timeout = 4
         self.login_as(self.data.unorm.username, self.data.normpass)
-        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred.views.edit', args=(self.data.cred.id,))))
+        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred:edit', args=(self.data.cred.id,))))
         self.waitforload()
         elempass = self.selenium.find_element_by_id('id_password')
         currpass = elempass.get_attribute('value')
@@ -109,7 +107,7 @@ class JavascriptTests(LiveServerTestCase):
     def test_password_edit_logo(self):
         timeout = 4
         self.login_as(self.data.unorm.username, self.data.normpass)
-        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred.views.edit', args=(self.data.cred.id,))))
+        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred:edit', args=(self.data.cred.id,))))
         self.waitforload()
         elemlogo = self.selenium.find_element_by_id('id_iconname')
         currlogo = elemlogo.get_attribute('value')
@@ -144,7 +142,7 @@ class JavascriptTests(LiveServerTestCase):
     def test_password_generator(self):
         timeout = 4
         self.login_as(self.data.unorm.username, self.data.normpass)
-        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred.views.edit', args=(self.data.cred.id,))))
+        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred:edit', args=(self.data.cred.id,))))
         self.waitforload()
         elempass = self.selenium.find_element_by_id('id_password')
         # Check password is hidden
@@ -176,7 +174,7 @@ class JavascriptTests(LiveServerTestCase):
     def test_script_injection(self):
         timeout = 4
         self.login_as(self.data.unorm.username, self.data.normpass)
-        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred.views.detail', args=(self.data.injectcred.id,))))
+        self.selenium.get('%s%s' % (self.live_server_url, reverse('cred:detail', args=(self.data.injectcred.id,))))
         self.waitforload()
         elempass = self.selenium.find_element_by_id('password')
         # Hover over password

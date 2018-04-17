@@ -107,7 +107,7 @@ def deleteapikey(request, key_id):
 
     if request.method == 'POST':
         key.delete()
-        return HttpResponseRedirect(reverse('account.views.profile'))
+        return HttpResponseRedirect(reverse('account:profile'))
 
     return render(request, 'account_deleteapikey.html', {'key': key})
 
@@ -124,7 +124,7 @@ def ldap_password_change(request,
     import ldap
 
     if post_change_redirect is None:
-        post_change_redirect = reverse('account.views.rattic_change_password_done')
+        post_change_redirect = reverse('account:rattic_change_password_done')
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():
@@ -149,7 +149,7 @@ def ldap_password_change(request,
 
 class RatticSessionDeleteView(SessionDeleteView):
     def get_success_url(self):
-        return reverse('account.views.profile')
+        return reverse('account:profile')
 
 
 class RatticTFADisableView(DisableView):
@@ -229,7 +229,7 @@ class TwoFactorAuthSecretIndexView(TemplateView):
         obj.save()
 
         # 成功したら個別画面にリダイレクト
-        return HttpResponseRedirect(reverse("two_factor_auth_secret_id", args=[obj.id]))
+        return HttpResponseRedirect(reverse("account:two_factor_auth_secret_id", args=[obj.id]))
 
 
 class SecretForm(forms.Form):
@@ -320,7 +320,7 @@ class TwoFactorAuthSecretModifyView(TemplateView):
             return self.render_to_response({"secret": secret, "form": form, "modify_form": modify_form, "id_": id_})
         secret.name = request.POST.get("new_secret_name")
         secret.save()
-        return HttpResponseRedirect(reverse("account.views.profile"))
+        return HttpResponseRedirect(reverse("account:profile"))
 
 
 class TwoFactorAuthSecretDeleteView(TemplateView):
@@ -335,7 +335,7 @@ class TwoFactorAuthSecretDeleteView(TemplateView):
         secret = secrets[0]
 
         secret.delete()
-        return HttpResponseRedirect(reverse("account.views.profile"))
+        return HttpResponseRedirect(reverse("account:profile"))
 
 
 def parse_qr_image(filepath):

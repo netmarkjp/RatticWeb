@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+
 {% load i18n %}
 {% block title %}{% trans "New API Key" %} - {% trans "Rattic" %}{% endblock %}
 
@@ -18,7 +18,7 @@
   <strong>{% trans "Secret Key" %}:</strong> {{ key.key }}
 </p>
 <p>
-  <a href="{% url 'account.views.profile' %}" class="btn btn-primary">{% trans "Back to Profile" %}</a>
+  <a href="{% url 'account:profile' %}" class="btn btn-primary">{% trans "Back to Profile" %}</a>
 </p>
 
 {% endblock %}

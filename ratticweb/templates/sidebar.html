@@ -1,34 +1,34 @@
-{% load url from future %}
+
 {% load static from staticfiles %}
 {% load i18n %}
 
 {% if user.is_authenticated %}
     <h4>{% trans "You" %}</h4>
         <p>{% blocktrans with username=user.username|title %}Welcome {{ username }}.{% endblocktrans %}<p>
-        <a class="btn" href="{% url "account.views.profile" %}">{% trans "Profile" %}</a>
-        <a class="btn btn-danger" href="{% url "django.contrib.auth.views.logout" %}">{% trans "Logout" %}</a>
-    <h4><a href="{% url "cred.views.tags"  %}">{% trans "Tags" %}</a></h4>
+        <a class="btn" href="{% url "account:profile" %}">{% trans "Profile" %}</a>
+        <a class="btn btn-danger" href="{% url "account:logout" %}">{% trans "Logout" %}</a>
+    <h4><a href="{% url "cred:tags"  %}">{% trans "Tags" %}</a></h4>
     {% if user.is_authenticated %}
         {% for tag in user.profile.favourite_tags.all %}
-        <p><i class="icon-minus"></i> <a href="{% url "cred.views.list" "tag" tag.id %}">{{ tag.name }}</a></p>
+        <p><i class="icon-minus"></i> <a href="{% url "cred:list" "tag" tag.id %}">{{ tag.name }}</a></p>
         {% empty %}
         <p>{% blocktrans %}Add Favourite Tags on the {% endblocktrans %}
-        <a href="{% url 'account.views.profile' %}">{% trans "profile" %}</a> {% blocktrans %}page to see them here.{% endblocktrans %}</p>
+        <a href="{% url 'account:profile' %}">{% trans "profile" %}</a> {% blocktrans %}page to see them here.{% endblocktrans %}</p>
         {% endfor %}
 		<h4>{% trans "Groups" %}</h4>
         {% for g in user.groups.all %}
-        <p><i class="icon-minus"></i> <a href="{% url "cred.views.list" "group" g.id %}">{{ g.name }}</a></p>
+        <p><i class="icon-minus"></i> <a href="{% url "cred:list" "group" g.id %}">{{ g.name }}</a></p>
         {% empty %}
         <p>{% blocktrans %}If you are a member of any groups, you will see them listed here. {% endblocktrans %}</p>
         {% endfor %}
     {% endif %}
 {% else %}
 <h4>{% trans "Login" %}</h4>
-    <form class="form-inline" method="post" action="{% url "login" %}?next={{ next|default:'' }}">{% csrf_token %}
+    <form class="form-inline" method="post" action="{% url "account:login" %}?next={{ next|default:'' }}">{% csrf_token %}
 			<label for="id_username">{% trans "Username" %}</label><input class="parent-sized" id="id_username" type="text" name="auth-username" maxlength="30" />
 			<label for="id_password">{% trans "Password" %}</label><input class="parent-sized" type="password" name="auth-password" id="id_password" />
 			<input type="submit" class="btn" value="{% trans "Login" %}"/>
-	{% if not LDAP_ENABLED %}<p><a href="{% url "django.contrib.auth.views.password_reset" %}">{% trans "Forgotten password?" %}</a></p>{% endif %}
+	{% if not LDAP_ENABLED %}<p><a href="{% url "account:password_reset" %}">{% trans "Forgotten password?" %}</a></p>{% endif %}
     <input type="hidden" name="rattic_tfa_login_view-current_step" value="auth" />
     </form>
 	{% if GOAUTH2_ENABLED %}

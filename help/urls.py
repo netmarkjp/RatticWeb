@@ -1,6 +1,7 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+from help.views import home, markdown
 
-urlpatterns = patterns('help.views',
-    url(r'^$', 'home'),
-    url(r'^(?P<page>[\w\-]+)/$', 'markdown'),
-)
+urlpatterns = [
+    url(r'^$', home, name="home"),
+    url(r'^(?P<page>[\w\-]+)/$', markdown, name="markdown"),
+]
