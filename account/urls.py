@@ -42,7 +42,7 @@ urlpatterns = [
 
 if settings.GOAUTH2_ENABLED:
     urlpatterns += [
-        url(r'', include("social_django.urls")),
+        url(r'', include("social_django.urls", namespace="social")),
     ]
 
 # URLs we don't want enabled with LDAP

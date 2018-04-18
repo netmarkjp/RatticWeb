@@ -33,7 +33,7 @@
     </form>
 	{% if GOAUTH2_ENABLED %}
     <div>
-			<a href="{% url 'socialauth_begin' 'google-oauth2' %}"><img alt="{% trans "Google Sign-in" %}" src="{% static "rattic/img/goauth.png" %}" /></a>
+			<a href="{% url 'account:social:begin' 'google-oauth2' %}"><img alt="{% trans "Google Sign-in" %}" src="{% static "rattic/img/goauth.png" %}" /></a>
     </div>
 	{% endif %}
 {% endif %}
