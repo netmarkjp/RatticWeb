@@ -25,11 +25,13 @@ Dev Setup: <https://github.com/tildaslash/RatticWeb/wiki/Development>
 # Difference from original RatticWeb
 
 - Drop Python 2.6 support => Only Python 2.7
-- Update django to 1.8 and also update some modules.
+- Update django to 1.11 and also update some modules.
 - UserProfile: New fature RatticWeb can use as Two Factor Auth Device
     - Read QR Image, and show 6 numbers
+    - **Cannot** share between users
 - Credential: New fature RatticWeb can use as Two Factor Auth Device
     - Read QR Image, and show 6 numbers
+    - **Can** share between users
 - Credential: Change Cred.title max length 64 => 255
 
 Note: When you use MySQL, `python manage.py migrate auth` must run before `python manage.py migrate`
@@ -52,7 +54,7 @@ Do `migrate auth` before `migrate` .
 
 ```bash
 $ mysql -u root -h 127.0.0.1 -P 3306 -e 'create database rattic character set utf8 collate utf8_unicode_ci;'
-$ python manage.py makemigrations
+$ python manage.py makemigrations account cred help ratticweb staff
 $ python manage.py migrate auth
 $ python manage.py migrate
 $ python manage.py createsuperuser --username rattic --email rattic@example.com
@@ -71,21 +73,14 @@ pip install git+https://github.com/npinchot/zbar.git
 
 # Major changes
 
-Major difference from original RatticWeb
+## Django 1.6 to 1.8
 
-## Python 2.7
+- forget the details... many changes.
 
-Support version is only Python 2.7
-(drop 2.6)
-
-## Django 1.11
-
-Use Django 1.11.
-
-And below changes because of dependency.
+## Django 1.8 to 1.11
 
 - [x] django-social-auth => social-auth-app-django
-    - [ ] do test
+    - [x] do test
 - remove south
     - [x] django-database-files => django-database-files-3000
 - [x] django.core.context_processors => django.template.context_processors
@@ -98,13 +93,3 @@ And below changes because of dependency.
 - [x] remove test_initial_password in account/tests/test_{profile,middleware}.py
     - when `set_unusable_password` called, user looks logout?
     - I cannot find the scenario to use this testcase
-
-## Two Factor Auth Device in Shared Credentials
-
-- Read QR Image, store secret, and show 6 numbers
-- Shared between users
-
-## Two Factor Auth Device in User Profile
-
-- Read QR Image, store secret, and show 6 numbers
-- Can use only each user themselves
