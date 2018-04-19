@@ -402,17 +402,10 @@ if GOAUTH2_ENABLED:
     LOGIN_URL = RATTIC_ROOT_URL + 'account/login/google-oauth2/'
     LOGIN_ERROR_URL = RATTIC_ROOT_URL + '/account/login-error/'
 
-    # SOCIAL_AUTH_RAISE_EXCEPTIONS = False
-    # SOCIAL_AUTH_PROCESS_EXCEPTIONS = 'social_auth.utils.log_exceptions_to_messages'
-
-    SOCIAL_AUTH_URL_NAMESPACE = 'social'
+    SOCIAL_AUTH_URL_NAMESPACE = 'account:social'
     SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config.get('goauth2', 'client_id')
     SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config.get('goauth2', 'client_secret')
     SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = [config.get('goauth2', 'domain')]
-
-    SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
-    SOCIAL_AUTH_COMPLETE_URL_NAME = 'socialauth_complete'
-    SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
 
     if confgetbool('goauth2', 'https_redirect', False):
         SOCIAL_AUTH_REDIRECT_IS_HTTPS = True

@@ -93,6 +93,7 @@ And below changes because of dependency.
 - [x] remove `django.utils.unittest`, use `django.test.utils`
 - [x] remove `django.conf.urls.patterns`
 - [x] regurate url/namespace/name mappings.
+    - social login url namespace has changed. moved to `/account/...`
 - [x] apply django.utils.safestring.mark_safe to renderd markdown, icons (custom tag)
 - [x] remove test_initial_password in account/tests/test_{profile,middleware}.py
     - when `set_unusable_password` called, user looks logout?
