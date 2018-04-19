@@ -19,7 +19,7 @@ class CredSSHKeyTest(TestCase):
     def test_upload_cred(self):
         # Load the edit form
         resp = self.data.norm.get(
-            reverse('cred.views.edit', args=(self.data.cred.id, ))
+            reverse('cred:edit', args=(self.data.cred.id, ))
         )
         self.assertEqual(resp.status_code, 200)
 
@@ -34,7 +34,7 @@ class CredSSHKeyTest(TestCase):
             post['ssh_key'] = fp
 
             resp = self.data.norm.post(
-                reverse('cred.views.edit', args=(self.data.cred.id, )),
+                reverse('cred:edit', args=(self.data.cred.id, )),
                 post
             )
             self.assertEqual(resp.status_code, 302)
@@ -50,7 +50,7 @@ class CredSSHKeyTest(TestCase):
         with open(os.path.join(ssh_keys, "1.pem")) as fle:
             cred = Cred.objects.create(ssh_key=File(fle), group=self.data.cred.group)
         cred.save()
-        resp = self.data.norm.get(reverse('cred.views.ssh_key_fingerprint', args=(cred.id, )))
+        resp = self.data.norm.get(reverse('cred:ssh_key_fingerprint', args=(cred.id, )))
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content, open(os.path.join(ssh_keys, "1.fingerprint")).read().strip())
 

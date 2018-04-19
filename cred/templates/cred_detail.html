@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+
 {% load i18n %}
 {% load cred_markdown %}
 {% load credicons %}
@@ -19,21 +19,21 @@
 <div class="alert alert-error">{% blocktrans %}This credential has been deleted and is in the trash can. It is only visible to staff. You can alter it if you wish, its history will still be recorded. Click the undelete button to restore it. If you click the Delete Permanently button then the password, its entire history and all its audit logs will be removed.{% endblocktrans %}</div>
 {% endif %}
 {% if not cred.is_latest %}
-<div class="alert alert-info"><strong>{% trans "Hey there!" %}</strong> {% blocktrans %}This credential is an historical version.{% endblocktrans %} <a href="{% url 'cred.views.detail' cred.latest.id %}">{% trans "Click here" %}</a> {% blocktrans %}to see the latest version.{% endblocktrans %}</div>
+<div class="alert alert-info"><strong>{% trans "Hey there!" %}</strong> {% blocktrans %}This credential is an historical version.{% endblocktrans %} <a href="{% url 'cred:detail' cred.latest.id %}">{% trans "Click here" %}</a> {% blocktrans %}to see the latest version.{% endblocktrans %}</div>
 {% endif %}
 {% if cred.on_changeq and not readonly %}
-<div class="alert alert-warning"><strong>{% trans "Change Required" %}</strong> {% blocktrans %}This credential is on the change queue and should have its password changed as soon as possible.{% endblocktrans %} {% trans "Why not" %} <a href="{% url 'cred.views.edit' cred.id %}">{% trans "do it now" %}</a>{% trans "?" %}</div>
+<div class="alert alert-warning"><strong>{% trans "Change Required" %}</strong> {% blocktrans %}This credential is on the change queue and should have its password changed as soon as possible.{% endblocktrans %} {% trans "Why not" %} <a href="{% url 'cred:edit' cred.id %}">{% trans "do it now" %}</a>{% trans "?" %}</div>
 {% endif %}
 {% if cred.is_latest and not readonly %}
 <div class="btn-group">
-    <a class="btn" href="{% url 'cred.views.edit' cred.id %}">{% trans "Edit" %}</a>
-    <a class="btn" href="{% url 'cred.views.list' 'history' cred.id 'ascending' 'id' %}">{% trans "History" %}</a>
-    {% if not delete %}<a class="btn btn-danger" href="{% url 'cred.views.delete' cred.id %}">{% trans "Delete" %}</a>{% endif %}
+    <a class="btn" href="{% url 'cred:edit' cred.id %}">{% trans "Edit" %}</a>
+    <a class="btn" href="{% url 'cred:list' 'history' cred.id 'ascending' 'id' %}">{% trans "History" %}</a>
+    {% if not delete %}<a class="btn btn-danger" href="{% url 'cred:delete' cred.id %}">{% trans "Delete" %}</a>{% endif %}
     {% if not cred.is_deleted %}
-        <a class="btn" href="{% url 'cred.views.addtoqueue' cred.id %}">{% trans "Add to Change Queue" %}</a>
+        <a class="btn" href="{% url 'cred:addtoqueue' cred.id %}">{% trans "Add to Change Queue" %}</a>
     {% endif %}
     {% if cred.is_deleted and not undelete %}
-    <a class="btn btn-success" href="{% url 'staff.views.credundelete' cred.id %}">{% trans "Undelete" %}</a>
+    <a class="btn btn-success" href="{% url 'staff:credundelete' cred.id %}">{% trans "Undelete" %}</a>
     {% endif %}
 </div>
 <p></p>
@@ -61,34 +61,34 @@
 </tr>
 
 {% if cred.attachment %}
-<tr><th>{% trans "Attachment" %}</th><td><a class="btn btn-mini" href="{% url "cred.views.downloadattachment" cred.id %}">{% trans "Download" %} {{ cred.attachment_name }}</a></td></tr>
+<tr><th>{% trans "Attachment" %}</th><td><a class="btn btn-mini" href="{% url "cred:downloadattachment" cred.id %}">{% trans "Download" %} {{ cred.attachment_name }}</a></td></tr>
 {% endif %}
 {% if cred.ssh_key %}
-<tr><th>{% trans "SSH Key" %}</th><td><a class="btn btn-mini" href="{% url "cred.views.downloadsshkey" cred.id %}">{% trans "Download" %} {{ cred.ssh_key_fingerprint }}</a></td></tr>
+<tr><th>{% trans "SSH Key" %}</th><td><a class="btn btn-mini" href="{% url "cred:downloadsshkey" cred.id %}">{% trans "Download" %} {{ cred.ssh_key_fingerprint }}</a></td></tr>
 {% endif %}
 
-<tr><th>{% trans "Owner Group" %}</th><td>{% if cred.group in groups.all %}<a href="{% url 'cred.views.list' 'group' cred.group.id %}">{{ cred.group.name }}</a>{% else %}{{ cred.group.name }}{% endif %}</td></tr>
+<tr><th>{% trans "Owner Group" %}</th><td>{% if cred.group in groups.all %}<a href="{% url 'cred:list' 'group' cred.group.id %}">{{ cred.group.name }}</a>{% else %}{{ cred.group.name }}{% endif %}</td></tr>
 <tr><th>{% trans "Viewer Groups" %}</th>
     <td>
         {% for g in cred.groups.all %}
             {% if g in groups.all %}
-                <a href="{% url 'cred.views.list' 'group' g.id %}">{{ g.name }}</a>
+                <a href="{% url 'cred:list' 'group' g.id %}">{{ g.name }}</a>
             {% else %}{{ g.name }}{% endif %}{% if not forloop.last %}, {% endif %}
         {% endfor %}
     </td>
  </tr>
-<tr><th>{% trans "Tags" %}</th><td>{% for t in cred.tags.all %}<a href="{% url 'cred.views.list' 'tag' t.id %}">{{ t.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</td></tr>
+<tr><th>{% trans "Tags" %}</th><td>{% for t in cred.tags.all %}<a href="{% url 'cred:list' 'tag' t.id %}">{{ t.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</td></tr>
 <tr><th>{% trans "Last Changed" %}</th><td>{{ cred.modified }}</td></tr>
 <tr><th>{% trans "Created" %}</th><td>{{ cred.created }}</td></tr>
 {% if cred.two_factor_auth_secret %}
 <tr>
     <th>
         One Time Password {# TODO use trans #}
-        <a id="reload-otp" class="btn btn-mini" dest="{% url "cred.views.otp" cred.id %}"><span id="reload-otp-icon" class="icon-refresh"></span></a>
+        <a id="reload-otp" class="btn btn-mini" dest="{% url "cred:otp" cred.id %}"><span id="reload-otp-icon" class="icon-refresh"></span></a>
 
     </th>
     <td>
-        <pre id="otp">Push <a id="reload-otp-initial" class="btn btn-mini" dest="{% url "cred.views.otp" cred.id %}"><span id="reload-otp-icon" class="icon-refresh"></span></a> to show One Time Password</pre>
+        <pre id="otp">Push <a id="reload-otp-initial" class="btn btn-mini" dest="{% url "cred:otp" cred.id %}"><span id="reload-otp-icon" class="icon-refresh"></span></a> to show One Time Password</pre>
     </td>
 </tr>
 {% endif %}

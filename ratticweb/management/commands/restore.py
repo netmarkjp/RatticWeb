@@ -6,15 +6,18 @@ from db_backup.errors import FailedBackup
 from db_backup.commands import restore
 
 from contextlib import contextmanager
-from optparse import make_option
 
 
 class Command(BaseCommand):
     help = 'Restores an empty database from a backup'
 
-    option_list = BaseCommand.option_list + (
-        make_option('--restore-from', help="Location of our backup file"),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--restore-from',
+            action='store',
+            dest='restore_from',
+            help="Location of our backup file",
+        )
 
     @contextmanager
     def restore_location(self, location):

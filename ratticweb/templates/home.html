@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load url from future %}
+
 {% load static from staticfiles %}
 {% load i18n %}
 
@@ -13,6 +13,6 @@
     <h1>{% trans "Welcome to Rattic" %}</h1>
 	<img class="biglogo" alt="{% trans "RatticDB Logo" %}" src="{% static rattic_logo %}">
     <p>{% trans "It does passwords." %}</p>
-    <p class="visible-phone"><a class='btn btn-primary' href="{% url "login" %}" >{% trans "Login" %}</a></p>
+    <p class="visible-phone"><a class='btn btn-primary' href="{% url "account:login" %}" >{% trans "Login" %}</a></p>
 </div>
 {% endblock %}

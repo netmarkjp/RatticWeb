@@ -26,7 +26,7 @@ before_script:
 script:
   - cp docs/travis/local.cfg conf/local.cfg
   - python manage.py collectstatic --noinput
-  - python manage.py makemigrations
+  - python manage.py makemigrations account cred help ratticweb staff
   - python manage.py migrate
   - ./runtests.sh --tests-only
 
@@ -34,7 +34,7 @@ script:
   - ./runtests.sh --tests-only
 
   - cp docs/travis/mysql_migration.cfg conf/local.cfg
-  - python manage.py makemigrations
+  - python manage.py makemigrations account cred help ratticweb staff
   - python manage.py migrate auth
   - python manage.py migrate
   - cp docs/travis/mysql_test.cfg conf/local.cfg

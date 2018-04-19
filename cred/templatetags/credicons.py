@@ -1,5 +1,6 @@
 from django import template
 from django.conf import settings
+from django.utils.safestring import mark_safe
 
 from cred.icon import get_icon_data
 
@@ -45,4 +46,4 @@ def cred_icon(iconname, txtfield=None, imgfield=None, tagid=None):
     tag += 'class="%s" ' % ' '.join(classes)
     tag += '>'
 
-    return tag
+    return mark_safe(tag)

@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.test.utils import override_settings
-from django.utils.unittest import skipIf
+from django.test.utils import skipIf
 from django.conf import settings
 
 from cStringIO import StringIO
@@ -22,7 +22,7 @@ class CredExportTests(TestCase):
         data = {
             'password': 'testpass',
         }
-        resp = self.data.norm.post(reverse('cred.views.download'), data)
+        resp = self.data.norm.post(reverse('cred:download'), data)
 
         # Check for the right headers
         self.assertEqual(resp.status_code, 200)

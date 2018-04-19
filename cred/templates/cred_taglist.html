@@ -1,4 +1,4 @@
-{% load url from future %}
+
 {% load i18n %}
 
 {% include "cred_part_newtagmodal.html" %}
@@ -11,11 +11,11 @@
 <tbody>
     {% for t,c in tags.items %}
     <tr>
-        <td><a href="{% url "cred.views.list" 'tag' t.id %}">{{ t.name }}</a></td>
+        <td><a href="{% url "cred:list" 'tag' t.id %}">{{ t.name }}</a></td>
         <td>{{ c }}</td>
         <td>
-          <a href="{% url "cred.views.tagedit" t.id %}" class="btn btn-mini">{% trans "Rename" %}</a>
-          <a href="{% url "cred.views.tagdelete" t.id %}" class="btn btn-mini">{% trans "Delete" %}</a>
+          <a href="{% url "cred:tagedit" t.id %}" class="btn btn-mini">{% trans "Rename" %}</a>
+          <a href="{% url "cred:tagdelete" t.id %}" class="btn btn-mini">{% trans "Delete" %}</a>
         </td>
     </tr>
     {% endfor %}

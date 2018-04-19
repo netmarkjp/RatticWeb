@@ -6,7 +6,7 @@ prevent these emails.
 
 Passwords:
 {% for cred in creds %}
-  * {{ cred.title }} - https://{{ host }}{% url "cred.views.detail" cred.id %}
+  * {{ cred.title }} - https://{{ host }}{% url "cred:detail" cred.id %}
 {% endfor %}
 
 Thanks,
