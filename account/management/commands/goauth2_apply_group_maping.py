@@ -18,17 +18,17 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-                "--apply-join",
-                dest="apply_join",
-                action="store_true",
-                default=False,
-                help="check mapping and apply join groups")
+            "--apply-join",
+            dest="apply_join",
+            action="store_true",
+            default=False,
+            help="check mapping and apply join groups")
         parser.add_argument(
-                "--apply-leave",
-                dest="apply_leave",
-                action="store_true",
-                default=False,
-                help="check mapping and apply leave groups")
+            "--apply-leave",
+            dest="apply_leave",
+            action="store_true",
+            default=False,
+            help="check mapping and apply leave groups")
 
     def handle(self, *args, **options):
         mappings = None
