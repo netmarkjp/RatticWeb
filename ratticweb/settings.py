@@ -210,6 +210,10 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': True,
         },
+        'commands': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
         'django_auth_ldap': {
             'handlers': ['console'],
             'propagate': True,
