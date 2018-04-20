@@ -228,8 +228,8 @@ class TwoFactorAuthSecretForm(ModelForm):
 class GOAUTH2GroupMapping(models.Model):
     name = models.CharField(max_length=255, blank=False)
     groups = models.ManyToManyField(Group, blank=False)
-    member_emails = models.TextField(blank=False)
     member_email_pattern = models.CharField(max_length=255, blank=True)
+    pattern_is_regex = models.BooleanField(default=False, blank=False)
     description = models.TextField(blank=True)
 
     def __str__(self):

@@ -22,22 +22,22 @@ def assign_groups(user, *args, **kwargs):  # pylint:disable=unused-argument
 
     for m in mappings:
         try:
-            if user.email in [l.strip() for l in m.member_emails.split("\n")]:
-                groups = m.groups.all()
-                for g in groups:
-                    g.user_set.add(user)
-                    g.save()
-        except Exception as e:
-            logger.error(e)
-
-        try:
+            matched = False
             if not m.member_email_pattern:
                 continue
-            pattern = re.compile(m.member_email_pattern, re.I)
-            if pattern and pattern.match(user.email):
-                groups = m.groups.all()
-                for g in groups:
-                    g.user_set.add(user)
-                    g.save()
+
+            if m.pattern_is_regex:
+                pattern = re.compile(m.member_email_pattern, re.I)
+                matched = pattern and pattern.match(user.email)
+            else:
+                matched = user.email == m.member_email_pattern
+
+            if not matched:
+                continue
+
+            groups = m.groups.all()
+            for g in groups:
+                g.user_set.add(user)
+                g.save()
         except Exception as e:
-            logger.error(e)
+            logger.error((e, m))
