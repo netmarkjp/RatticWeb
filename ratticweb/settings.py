@@ -206,6 +206,14 @@ LOGGING = {
         }
     },
     'loggers': {
+        'ratticweb': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
+        'commands': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
         'django_auth_ldap': {
             'handlers': ['console'],
             'propagate': True,
@@ -416,7 +424,24 @@ if GOAUTH2_ENABLED:
         'https://www.googleapis.com/auth/userinfo.profile'
     ]
 
-    SESSION_SERIALIZER='django.contrib.sessions.serializers.PickleSerializer'
+    SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+    # see also: social_core.pipeline.DEFAULT_AUTH_PIPELINE
+    SOCIAL_AUTH_PIPELINE = (
+        'social_core.pipeline.social_auth.social_details',
+        'social_core.pipeline.social_auth.social_uid',
+        'social_core.pipeline.social_auth.auth_allowed',
+        'social_core.pipeline.social_auth.social_user',
+        'social_core.pipeline.user.get_username',
+        # 'social_core.pipeline.mail.mail_validation',
+        # 'social_core.pipeline.social_auth.associate_by_email',
+        'social_core.pipeline.user.create_user',
+        'social_core.pipeline.social_auth.associate_user',
+        'social_core.pipeline.social_auth.load_extra_data',
+        'social_core.pipeline.user.user_details',
+        'account.pipelines.assign_groups',
+    )
+
 
 # Passwords expiry settings
 if GOAUTH2_ENABLED:

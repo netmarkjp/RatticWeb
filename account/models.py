@@ -6,6 +6,7 @@ from django import forms
 from django.forms import ModelForm, SelectMultiple
 from django.contrib import admin
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 from django.contrib.auth.forms import SetPasswordForm
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -224,4 +225,16 @@ class TwoFactorAuthSecretForm(ModelForm):
         exclude = ("user", "encrypted_secret", "created")
 
 
+class GOAUTH2GroupMapping(models.Model):
+    name = models.CharField(max_length=255, blank=False)
+    groups = models.ManyToManyField(Group, blank=False)
+    member_email_pattern = models.CharField(max_length=255, blank=True)
+    pattern_is_regex = models.BooleanField(default=False, blank=False)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 admin.site.register(UserProfile)
+admin.site.register(GOAUTH2GroupMapping)
